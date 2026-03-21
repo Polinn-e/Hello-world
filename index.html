@@ -1,8 +1,7 @@
-import math
-import time
 import sys
+import time
 
-# ANSI коды для цветов (кроссплатформенная красота)
+# ANSI коды для цветов (единый стиль)
 class Colors:
     PURPLE = '\033[95m'
     CYAN = '\033[96m'
@@ -12,54 +11,44 @@ class Colors:
     YELLOW = '\033[93m'
     RED = '\033[91m'
     BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
     END = '\033[0m'
 
-def print_slow(text: str, delay: float = 0.03) -> None:
-    """Красивый эффект печатной машинки"""
+def print_slow(text: str, delay: float = 0.05) -> None:
+    """Эффект печатной машинки"""
     for char in text:
         sys.stdout.write(char)
         sys.stdout.flush()
         time.sleep(delay)
     print()
 
-def draw_box(title: str, content: str) -> None:
-    """Рисует красивую рамку вокруг текста"""
-    width = 60
+def draw_centered_box(text: str) -> None:
+    """Рисует рамку вокруг текста"""
+    width = 50
+    padding = 2
+    
     print(f"\n{Colors.CYAN}╔{'═' * (width - 2)}╗{Colors.END}")
-    title_line = f"  {Colors.BOLD}{title}{Colors.END}"
-    print(f"{Colors.CYAN}║{Colors.END} {title_line:^{width - 4}} {Colors.CYAN}║{Colors.END}")
-    print(f"{Colors.CYAN}╟{'─' * (width - 2)}╢{Colors.END}")
-    for line in content.split('\n'):
-        print(f"{Colors.CYAN}║{Colors.END}  {line:<{width - 6}}  {Colors.CYAN}║{Colors.END}")
+    print(f"{Colors.CYAN}║{Colors.END}{' ' * (width - 2)}{Colors.CYAN}║{Colors.END}")
+    # Центрирование текста
+    padded_text = f"  {Colors.BOLD}{Colors.YELLOW}{text}{Colors.END}  "
+    print(f"{Colors.CYAN}║{Colors.END}{padded_text:^{width - 2}}{Colors.CYAN}║{Colors.END}")
+    print(f"{Colors.CYAN}║{Colors.END}{' ' * (width - 2)}{Colors.CYAN}║{Colors.END}")
     print(f"{Colors.CYAN}╚{'═' * (width - 2)}╝{Colors.END}\n")
 
 def main() -> None:
-    title = "✨ THE BEAUTY OF NUMBERS ✨"
+    # Эффект загрузки
+    print_slow(f"{Colors.DARKCYAN}Инициализация системы...{Colors.END}", 0.03)
+    time.sleep(0.3)
     
-    # Вычисляем число. 0.69 это примерно ln(2)
-    magic_number = math.log(2)
-    formatted_number = f"{magic_number:.2f}"
+    # Основное сообщение
+    draw_centered_box("ПРИВЕТ, МИР! 👋")
     
-    content = f"""
-    Вычисляем фундаментальную константу...
-    
-    Натуральный логарифм от 2:
-    {Colors.YELLOW}{Colors.BOLD}ln(2) ≈ {formatted_number}{Colors.END}
-    
-    Статус: {Colors.GREEN}ПО КРАСОТЕ ✅{Colors.END}
-    """
-    
-    print_slow(f"{Colors.DARKCYAN}Загрузка модулей эстетики...{Colors.END}", 0.05)
-    time.sleep(0.5)
-    
-    draw_box(title, content)
-    
-    # Финальный аккорд
-    print(f"{Colors.PURPLE}>>> {Colors.BOLD}0.69{Colors.END} {Colors.PURPLE}достигнуто.{Colors.END}")
+    # Дополнительное сообщение
+    print(f"{Colors.GREEN}✓{Colors.END} Статус: {Colors.BOLD}Успешно{Colors.END}")
+    print(f"{Colors.BLUE}ℹ{Colors.END} Версия: {Colors.BOLD}0.69{Colors.END}")
+    print(f"{Colors.PURPLE}♥{Colors.END} Код: {Colors.BOLD}По Красоте{Colors.END}\n")
 
 if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        print(f"\n{Colors.RED}Прервано пользователем.{Colors.END}")
+        print(f"\n{Colors.RED}✖ Завершено.{Colors.END}")
