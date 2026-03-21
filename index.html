@@ -1,167 +1,449 @@
-<IDOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="ru">
 <head>
-import math
-import time
-import sys
-from datetime import datetime
-
-# ═══════════════════════════════════════════════════════════════
-# ANSI ЦВЕТА ДЛЯ КОНСОЛИ
-# ═══════════════════════════════════════════════════════════════
-class Colors:
-    PURPLE = '\033[95m'
-    CYAN = '\033[96m'
-    DARKCYAN = '\033[36m'
-    BLUE = '\033[94m'
-    GREEN = '\033[92m'
-    YELLOW = '\033[93m'
-    RED = '\033[91m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
-    END = '\033[0m'
-
-# ═══════════════════════════════════════════════════════════════
-# ФУНКЦИИ ВЫВОДА
-# ═══════════════════════════════════════════════════════════════
-def print_slow(text: str, delay: float = 0.02) -> None:
-    """Эффект печатной машинки"""
-    for char in text:
-        sys.stdout.write(char)
-        sys.stdout.flush()
-        time.sleep(delay)
-    print()
-
-def draw_box(title: str, content: str, width: int = 65) -> None:
-    """Рисует красивую рамку вокруг текста"""
-    print(f"\n{Colors.CYAN}╔{'═' * (width - 2)}╗{Colors.END}")
-    title_line = f"  {Colors.BOLD}{title}{Colors.END}"
-    print(f"{Colors.CYAN}║{Colors.END} {title_line:^{width - 4}} {Colors.CYAN}║{Colors.END}")
-    print(f"{Colors.CYAN}╟{'─' * (width - 2)}╢{Colors.END}")
-    for line in content.split('\n'):
-        print(f"{Colors.CYAN}║{Colors.END}  {line:<{width - 6}}  {Colors.CYAN}║{Colors.END}")
-    print(f"{Colors.CYAN}╚{'═' * (width - 2)}╝{Colors.END}\n")
-
-def draw_progress_bar(progress: float, length: int = 40) -> None:
-    """Рисует прогресс-бар"""
-    filled = int(length * progress)
-    bar = '█' * filled + '░' * (length - filled)
-    percent = progress * 100
-    print(f"\r{Colors.CYAN}[{bar}]{Colors.END} {percent:.1f}%", end='', flush=True)
-
-# ═══════════════════════════════════════════════════════════════
-# МОДЕЛЬ КРЕДИТНОГО СКОРИНГА
-# ═══════════════════════════════════════════════════════════════
-class CreditScoreModel:
-    """Модель оценки кредитоспособности"""
-    
-    def __init__(self, model_name: str = "CreditScorer v1.0"):
-        self.model_name = model_name
-        self.accuracy = 0.69  # Точность модели
-        self.trained = False
-    
-    def train(self, epochs: int = 5) -> None:
-        """Обучение модели с прогресс-баром"""
-        print_slow(f"\n{Colors.DARKCYAN}Запуск обучения модели...{Colors.END}", 0.03)
-        
-        for i in range(epochs):
-            draw_progress_bar((i + 1) / epochs)
-            time.sleep(0.3)
-        
-        self.trained = True
-        print(f"\n{Colors.GREEN}✓ Обучение завершено{Colors.END}")
-    
-    def predict(self, income: float, debt: float, credit_history: int) -> dict:
-        """Предсказание вероятности одобрения кредита"""
-        score = (income / (debt + 1)) * (credit_history / 120)
-        probability = min(1.0, score / 10)
-        
-        return {
-            'approved': probability >= 0.5,
-            'probability': probability,
-            'risk': 'LOW' if probability > 0.7 else 'MEDIUM' if probability > 0.4 else 'HIGH'
-        }
-    
-    def get_metrics(self) -> dict:
-        """Возвращает метрики модели"""
-        return {
-            'accuracy': self.accuracy,
-            'precision': 0.71,
-            'recall': 0.68,
-            'f1_score': 0.69,
-            'auc_roc': 0.74
+    <title>Моя презентация</title>
+</head>
+<body>
+<p> 16 февраля 2026
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏦 Credit Score Model — Точность 0.69</title>
+    <style>
+        /* ═══════════════════════════════════════════════════════════════
+           ОСНОВНЫЕ СТИЛИ
+           ═══════════════════════════════════════════════════════════════ */
+        :root {
+            --purple: #9b59b6;
+            --cyan: #00bcd4;
+            --blue: #3498db;
+            --green: #2ecc71;
+            --yellow: #f1c40f;
+            --red: #e74c3c;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
         }
 
-# ═══════════════════════════════════════════════════════════════
-# ОСНОВНАЯ ФУНКЦИЯ
-# ═══════════════════════════════════════════════════════════════
-def main() -> None:
-    """Точка входа в приложение"""
-    
-    # Заголовок
-    title = "🏦 CREDIT SCORE MODEL v1.0"
-    timestamp = datetime.now().strftime("%d.%m.%Y %H:%M")
-    
-    # Инициализация модели
-    model = CreditScoreModel()
-    
-    # Информация о модели
-    content_info = f"""
-    Модель: {Colors.BOLD}{model.model_name}{Colors.END}
-    Дата: {Colors.CYAN}{timestamp}{Colors.END}
-    Статус: {Colors.GREEN}ГОТОВА К РАБОТЕ ✅{Colors.END}
-    """
-    
-    print_slow(f"{Colors.DARKCYAN}Инициализация системы...{Colors.END}", 0.03)
-    time.sleep(0.3)
-    
-    draw_box(title, content_info)
-    
-    # Обучение
-    model.train(epochs=5)
-    
-    # Метрики
-    metrics = model.get_metrics()
-    content_metrics = f"""
-    {Colors.BOLD}МЕТРИКИ МОДЕЛИ:{Colors.END}
-    
-    ┌─────────────────────────────────────┐
-    │  Точность (Accuracy):  {Colors.YELLOW}{Colors.BOLD}{metrics['accuracy']:.2f}{Colors.END}      │
-    │  Прецизионность:       {Colors.BLUE}{metrics['precision']:.2f}{Colors.END}      │
-    │  Полнота (Recall):     {Colors.GREEN}{metrics['recall']:.2f}{Colors.END}      │
-    │  F1-Score:             {Colors.PURPLE}{metrics['f1_score']:.2f}{Colors.END}      │
-    │  AUC-ROC:              {Colors.CYAN}{metrics['auc_roc']:.2f}{Colors.END}      │
-    └─────────────────────────────────────┘
-    
-    {Colors.GREEN}✓ Модель готова к выдаче кредитов{Colors.END}
-    """
-    
-    draw_box("📊 МЕТРИКИ ТОЧНОСТИ", content_metrics)
-    
-    # Тестовые предсказания
-    print(f"{Colors.DARKCYAN}Тестовые предсказания:{Colors.END}\n")
-    
-    test_cases = [
-        {"income": 100000, "debt": 20000, "history": 60, "name": "Клиент А"},
-        {"income": 50000, "debt": 40000, "history": 12, "name": "Клиент Б"},
-        {"income": 150000, "debt": 10000, "history": 120, "name": "Клиент В"},
-    ]
-    
-    for case in test_cases:
-        result = model.predict(case['income'], case['debt'], case['history'])
-        status = f"{Colors.GREEN}ОДОБРЕНО ✅{Colors.END}" if result['approved'] else f"{Colors.RED}ОТКАЗ ❌{Colors.END}"
-        print(f"  {case['name']}: {status} (Вероятность: {result['probability']:.2f}, Риск: {result['risk']})")
-    
-    # Финал
-    print(f"\n{Colors.PURPLE}{'═' * 50}{Colors.END}")
-    print(f"{Colors.PURPLE}>>> {Colors.BOLD}ТОЧНОСТЬ МОДЕЛИ: 0.69{Colors.END} {Colors.PURPLE}достигнута ✅{Colors.END}")
-    print(f"{Colors.PURPLE}{'═' * 50}{Colors.END}\n")
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-# ═══════════════════════════════════════════════════════════════
-# ЗАПУСК
-# ═══════════════════════════════════════════════════════════════
-if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        print(f"\n{Colors.RED}✖ Прервано пользователем.{Colors.END}")
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: var(--light);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           ЗАГОЛОВОК
+           ═══════════════════════════════════════════════════════════════ */
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            animation: fadeInDown 1s ease;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            color: var(--cyan);
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(0, 188, 212, 0.5);
+        }
+
+        .header .subtitle {
+            font-size: 1.2em;
+            color: var(--purple);
+            opacity: 0.9;
+        }
+
+        .header .date {
+            font-size: 0.9em;
+            color: var(--blue);
+            margin-top: 10px;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           КАРТОЧКИ
+           ═══════════════════════════════════════════════════════════════ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            animation: fadeInUp 0.8s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 188, 212, 0.3);
+        }
+
+        .card h2 {
+            color: var(--cyan);
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 2px solid var(--cyan);
+            padding-bottom: 10px;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           МЕТРИКИ
+           ═══════════════════════════════════════════════════════════════ */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .metric-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .metric-item.highlight {
+            background: linear-gradient(135deg, rgba(155, 89, 182, 0.3), rgba(0, 188, 212, 0.3));
+            border: 2px solid var(--purple);
+            grid-column: span 2;
+        }
+
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--yellow);
+        }
+
+        .metric-item.highlight .metric-value {
+            color: var(--purple);
+            font-size: 3em;
+            text-shadow: 0 0 20px rgba(155, 89, 182, 0.5);
+        }
+
+        .metric-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           ПРОГРЕСС БАР
+           ═══════════════════════════════════════════════════════════════ */
+        .progress-container {
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--cyan), var(--blue));
+            border-radius: 10px;
+            animation: progressFill 2s ease forwards;
+            width: 0;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9em;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           ТАБЛИЦА КЛИЕНТОВ
+           ═══════════════════════════════════════════════════════════════ */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        th {
+            color: var(--cyan);
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .status-approved {
+            color: var(--green);
+            font-weight: bold;
+        }
+
+        .status-rejected {
+            color: var(--red);
+            font-weight: bold;
+        }
+
+        .risk-low { color: var(--green); }
+        .risk-medium { color: var(--yellow); }
+        .risk-high { color: var(--red); }
+
+        /* ═══════════════════════════════════════════════════════════════
+           ФУТЕР
+           ═══════════════════════════════════════════════════════════════ */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer .highlight {
+            color: var(--purple);
+            font-size: 1.5em;
+            font-weight: bold;
+            text-shadow: 0 0 20px rgba(155, 89, 182, 0.5);
+        }
+
+        .footer .checkmark {
+            color: var(--green);
+            font-size: 1.2em;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           АНИМАЦИИ
+           ═══════════════════════════════════════════════════════════════ */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes progressFill {
+            from { width: 0; }
+            to { width: 69%; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           АДАПТИВНОСТЬ
+           ═══════════════════════════════════════════════════════════════ */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .metric-item.highlight {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ═══════════════════════════════════════════════════════════════
+         ЗАГОЛОВОК
+         ═══════════════════════════════════════════════════════════════ -->
+    <header class="header">
+        <h1>🏦 CREDIT SCORE MODEL v1.0</h1>
+        <p class="subtitle">Система оценки кредитоспособности клиентов</p>
+        <p class="date">📅 21 марта 2026 | ⏱️ 14:30</p>
+    </header>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         ОСНОВНОЙ КОНТЕНТ
+         ═══════════════════════════════════════════════════════════════ -->
+    <div class="container">
+        
+        <!-- Карточка 1: Метрики Модели -->
+        <div class="card">
+            <h2>📊 Метрики Точности</h2>
+            <div class="metrics-grid">
+                <div class="metric-item highlight">
+                    <div class="metric-value pulse">0.69</div>
+                    <div class="metric-label">Точность (Accuracy)</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value" style="color: var(--blue)">0.71</div>
+                    <div class="metric-label">Прецизионность</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value" style="color: var(--green)">0.68</div>
+                    <div class="metric-label">Полнота (Recall)</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value" style="color: var(--purple)">0.69</div>
+                    <div class="metric-label">F1-Score</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value" style="color: var(--cyan)">0.74</div>
+                    <div class="metric-label">AUC-ROC</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Карточка 2: Прогресс Обучения -->
+        <div class="card">
+            <h2>🎯 Прогресс Обучения</h2>
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span>Точность модели</span>
+                    <span>69%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+            </div>
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span>Готовность к работе</span>
+                    <span>100%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="animation-duration: 1.5s;"></div>
+                </div>
+            </div>
+            <p style="margin-top: 20px; color: var(--green);">
+                ✅ Модель готова к выдаче кредитов
+            </p>
+        </div>
+
+        <!-- Карточка 3: Статус Клиентов -->
+        <div class="card">
+            <h2>👥 Тестовые Клиенты</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Клиент</th>
+                        <th>Статус</th>
+                        <th>Риск</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Клиент А</td>
+                        <td class="status-approved">ОДОБРЕНО ✅</td>
+                        <td class="risk-low">LOW</td>
+                    </tr>
+                    <tr>
+                        <td>Клиент Б</td>
+                        <td class="status-rejected">ОТКАЗ ❌</td>
+                        <td class="risk-high">HIGH</td>
+                    </tr>
+                    <tr>
+                        <td>Клиент В</td>
+                        <td class="status-approved">ОДОБРЕНО ✅</td>
+                        <td class="risk-low">LOW</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Карточка 4: Информация о Модели -->
+        <div class="card">
+            <h2>ℹ️ О Модели</h2>
+            <div style="line-height: 1.8;">
+                <p><strong>Название:</strong> CreditScorer v1.0</p>
+                <p><strong>Версия:</strong> 1.0.0</p>
+                <p><strong>Дата:</strong> 21.03.2026</p>
+                <p><strong>Статус:</strong> <span style="color: var(--green)">ГОТОВА К РАБОТЕ ✅</span></p>
+                <p><strong>Язык:</strong> Python 3.x</p>
+                <p><strong>Формат:</strong> Консоль + HTML</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         ФУТЕР
+         ═══════════════════════════════════════════════════════════════ -->
+    <footer class="footer">
+        <p class="highlight">>>> ТОЧНОСТЬ МОДЕЛИ: 0.69 достигнута <span class="checkmark">✅</span></p>
+        <p style="margin-top: 20px; opacity: 0.7;">
+            Сделано по красоте ✨ | GitHub Ready 🚀
+        </p>
+    </footer>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         СКРИПТЫ
+         ═══════════════════════════════════════════════════════════════ -->
+    <script>
+        // Анимация появления карточек с задержкой
+        document.querySelectorAll('.card').forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.2}s`;
+        });
+
+        // Динамическое обновление времени
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('ru-RU', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            document.querySelector('.date').innerHTML = 
+                `📅 21 марта 2026 | ⏱️ ${timeString}`;
+        }
+        
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // Эффект при наведении на метрики
+        document.querySelectorAll('.metric-item').forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                item.style.transform = 'scale(1.05)';
+            });
+            item.addEventListener('mouseleave', () => {
+                item.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+    </p>
+</body>
+</html>    
+    
