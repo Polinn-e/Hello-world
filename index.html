@@ -1,16 +1,11 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<title>Моя презентация</title>
-</head>
-<body>
-<p> 21 марта 2026
-</p>
 import math
 import time
 import sys
 
-# ANSI коды для цветов
+# ANSI коды для цветов (кроссплатформенная красота)
 class Colors:
     PURPLE = '\033[95m'
     CYAN = '\033[96m'
@@ -44,6 +39,8 @@ def draw_box(title: str, content: str) -> None:
 
 def main() -> None:
     title = "✨ THE BEAUTY OF NUMBERS ✨"
+    
+    # Вычисляем число. 0.69 это примерно ln(2)
     magic_number = math.log(2)
     formatted_number = f"{magic_number:.2f}"
     
@@ -58,7 +55,10 @@ def main() -> None:
     
     print_slow(f"{Colors.DARKCYAN}Загрузка модулей эстетики...{Colors.END}", 0.05)
     time.sleep(0.5)
+    
     draw_box(title, content)
+    
+    # Финальный аккорд
     print(f"{Colors.PURPLE}>>> {Colors.BOLD}0.69{Colors.END} {Colors.PURPLE}достигнуто.{Colors.END}")
 
 if __name__ == "__main__":
