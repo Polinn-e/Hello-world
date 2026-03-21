@@ -1,385 +1,96 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Криптоарифметика | Презентация</title>
-    
-    <!-- Подключение шрифтов -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
-
-    <style>
-        :root {
-            /* Светлая палитра */
-            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            --card-bg: rgba(255, 255, 255, 0.9);
-            --card-border: rgba(255, 255, 255, 0.6);
-            --text-main: #2d3748;
-            --text-muted: #718096;
-            --accent-primary: #3182ce;
-            --accent-secondary: #63b3ed;
-            --success: #38a169;
-            --code-bg: #edf2f7;
-            --code-text: #2d3748;
-            --shadow-soft: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background: var(--bg-gradient);
-            color: var(--text-main);
-            line-height: 1.6;
-            min-height: 100vh;
-            padding: 40px 20px;
-            background-attachment: fixed;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 60px;
-            animation: fadeInDown 1s ease;
-        }
-
-        h1 {
-            font-weight: 800;
-            font-size: 2.5rem;
-            background: linear-gradient(to right, #2b6cb0, #4299e1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .subtitle {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-        }
-
-        /* Секция ссылок */
-        .links-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid #fff;
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 50px;
-            text-align: center;
-            box-shadow: var(--shadow-soft);
-            animation: fadeInUp 1s ease;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 12px 25px;
-            background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(49, 130, 206, 0.3);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(49, 130, 206, 0.4);
-            filter: brightness(1.05);
-        }
-
-        /* Карточки задач */
-        .puzzle-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(5px);
-            border: 1px solid #fff;
-            border-radius: 16px;
-            padding: 30px;
-            margin-bottom: 40px;
-            box-shadow: var(--shadow-soft);
-            transition: transform 0.3s ease;
-            animation: fadeInUp 1s ease;
-            animation-fill-mode: both;
-        }
-
-        .puzzle-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-
-        .puzzle-title {
-            font-size: 1.5rem;
-            color: #1a202c;
-            margin-bottom: 15px;
-            border-left: 4px solid var(--accent-primary);
-            padding-left: 15px;
-            font-weight: 600;
-        }
-
-        .status {
-            display: inline-block;
-            background: rgba(56, 161, 105, 0.1);
-            color: var(--success);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            border: 1px solid rgba(56, 161, 105, 0.2);
-        }
-
-        .mapping {
-            background: #f7fafc;
-            padding: 15px;
-            border-radius: 8px;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            margin-bottom: 20px;
-            border-left: 2px solid var(--success);
-            border: 1px solid #e2e8f0;
-        }
-
-        .mapping span {
-            color: var(--accent-primary);
-            font-weight: bold;
-        }
-
-        /* Блок с примером */
-        .math-block {
-            background: var(--code-bg);
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 20px;
-            overflow-x: auto;
-            margin: 20px 0;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
-        }
-
-        pre {
-            font-family: 'Fira Code', monospace;
-            color: var(--code-text);
-            font-size: 1.1rem;
-            line-height: 1.4;
-            margin: 0;
-            text-align: right;
-            display: inline-block;
-            min-width: 100%;
-        }
-
-        .operator {
-            color: var(--accent-primary);
-            font-weight: bold;
-        }
-
-        .line {
-            color: #a0aec0;
-        }
-
-        .result {
-            color: var(--success);
-            font-weight: bold;
-        }
-
-        .comment {
-            color: #a0aec0;
-            font-size: 0.8em;
-            margin-left: 10px;
-        }
-
-        .verification {
-            text-align: center;
-            margin-top: 15px;
-            font-size: 0.95rem;
-            color: var(--text-muted);
-        }
-
-        .verification strong {
-            color: #1a202c;
-        }
-
-        /* Анимации */
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Задержка анимации для карточек */
-        .puzzle-card:nth-child(2) { animation-delay: 0.2s; }
-        .puzzle-card:nth-child(3) { animation-delay: 0.4s; }
-        .puzzle-card:nth-child(4) { animation-delay: 0.6s; }
-        .puzzle-card:nth-child(5) { animation-delay: 0.8s; }
-        .puzzle-card:nth-child(6) { animation-delay: 1.0s; }
-
-        /* Адаптивность */
-        @media (max-width: 600px) {
-            h1 { font-size: 1.8rem; }
-            .puzzle-card { padding: 20px; }
-            pre { font-size: 0.9rem; }
-            .btn-group { flex-direction: column; }
-            .btn { width: 100%; text-align: center; }
-        }
-    </style>
+<title>Моя презентация</title>
 </head>
 <body>
+<p> 21 марта 2026
+</p>
+ import math
+import time
+import sys
 
-    <div class="container">
-        <header>
-            <h1>Криптоарифметика</h1>
-            <div class="subtitle">Коллекция решенных числовых ребусов</div>
-        </header>
+# ANSI коды для цветов (чтобы работало везде без установки библиотек)
+class Colors:
+    PURPLE = '\033[95m'
+    CYAN = '\033[96m'
+    DARKCYAN = '\033[36m'
+    BLUE = '\033[94m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    RED = '\033[91m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+    END = '\033[0m'
 
-        <div class="links-card">
-            <h2>Материалы презентации</h2>
-            <p style="color: var(--text-muted); margin-top: 10px;">Скачайте файлы для подробного изучения</p>
-            <div class="btn-group">
-                <a href="СетьВводный.pptx" class="btn" download>📥 Презентация (.pptx)</a>
-                <a href="index.html" class="btn" download>📄 Файл проверки (.html)</a>
-            </div>
-        </div>
+def print_slow(text: str, delay: float = 0.03) -> None:
+    """Красивый эффект печатной машинки"""
+    for char in text:
+        sys.stdout.write(char)
+        sys.stdout.flush()
+        time.sleep(delay)
+    print()
 
-        <!-- Задача 1 -->
-        <div class="puzzle-card">
-            <div class="puzzle-title">SEND + MORE = MONEY</div>
-            <div class="status">✓ Решение найдено</div>
-            
-            <div class="mapping">
-                Ключ: <span>D=7, E=5, M=1, N=6, O=0, R=8, S=9, Y=2</span>
-            </div>
+def draw_box(title: str, content: str) -> None:
+    """Рисует красивую рамку вокруг текста"""
+    width = 60
+    padding = 2
+    
+    # Верхняя граница
+    print(f"\n{Colors.CYAN}╔{'═' * (width - 2)}╗{Colors.END}")
+    
+    # Заголовок
+    title_line = f"  {Colors.BOLD}{title}{Colors.END}"
+    # Центрирование заголовка (примерное)
+    print(f"{Colors.CYAN}║{Colors.END} {title_line:^{width - 4}} {Colors.CYAN}║{Colors.END}")
+    
+    # Разделитель
+    print(f"{Colors.CYAN}╟{'─' * (width - 2)}╢{Colors.END}")
+    
+    # Контент
+    for line in content.split('\n'):
+        print(f"{Colors.CYAN}║{Colors.END}  {line:<{width - 6}}  {Colors.CYAN}║{Colors.END}")
+        
+    # Нижняя граница
+    print(f"{Colors.CYAN}╚{'═' * (width - 2)}╝{Colors.END}\n")
 
-            <div class="math-block">
-                <pre>
-  9567
-+ 1085
-<span class="line">------</span>
-<span class="result"> 10652</span>
-                </pre>
-            </div>
-            <div class="verification">
-                Проверка: <strong>9567 + 1085 = 10652</strong> ✓
-            </div>
-        </div>
+def main() -> None:
+    # Очищаем консоль (опционально, работает не везде одинаково)
+    # os.system('cls' if os.name == 'nt' else 'clear') 
 
-        <!-- Задача 2 -->
-        <div class="puzzle-card">
-            <div class="puzzle-title">ВОЛК + ЛИСА = ЗВЕРИ</div>
-            <div class="status">✓ Решение найдено</div>
-            
-            <div class="mapping">
-                Ключ: <span>А=4, В=5, Е=0, З=1, И=6, К=2, Л=9, О=3, Р=7, С=8</span>
-            </div>
+    title = "✨ THE BEAUTY OF NUMBERS ✨"
+    
+    # Вычисляем число. 0.69 это примерно ln(2)
+    magic_number = math.log(2)
+    formatted_number = f"{magic_number:.2f}"
+    
+    content = f"""
+    Вычисляем фундаментальную константу...
+    
+    Натуральный логарифм от 2:
+    {Colors.YELLOW}{Colors.BOLD}ln(2) ≈ {formatted_number}{Colors.END}
+    
+    Статус: {Colors.GREEN}ПО КРАСОТЕ ✅{Colors.END}
+    """
+    
+    print_slow(f"{Colors.DARKCYAN}Загрузка модулей эстетики...{Colors.END}", 0.05)
+    time.sleep(0.5)
+    
+    draw_box(title, content)
+    
+    # Финальный аккорд
+    print(f"{Colors.PURPLE}>>> {Colors.BOLD}0.69{Colors.END} {Colors.PURPLE}достигнуто.{Colors.END}")
 
-            <div class="math-block">
-                <pre>
-  5392  <span class="comment">(ВОЛК)</span>
-+ 9684  <span class="comment">(ЛИСА)</span>
-<span class="line">------</span>
-<span class="result"> 15076</span>  <span class="comment">(ЗВЕРИ)</span>
-                </pre>
-            </div>
-            <div class="verification">
-                Проверка: <strong>5392 + 9684 = 15076</strong> ✓
-            </div>
-        </div>
-
-        <!-- Задача 3 -->
-        <div class="puzzle-card">
-            <div class="puzzle-title">КТО + КОТ = ТОК</div>
-            <div class="status">✓ Решение найдено</div>
-            
-            <div class="mapping">
-                Ключ: <span>К=4, О=5, Т=9</span>
-            </div>
-
-            <div class="math-block">
-                <pre>
-  495  <span class="comment">(КТО)</span>
-+ 459  <span class="comment">(КОТ)</span>
-<span class="line">-----</span>
-<span class="result">  954</span>  <span class="comment">(ТОК)</span>
-                </pre>
-            </div>
-            <div class="verification">
-                Проверка: <strong>495 + 459 = 954</strong> ✓
-            </div>
-        </div>
-
-        <!-- Задача 4 -->
-        <div class="puzzle-card">
-            <div class="puzzle-title">КОШКА + КОШКА + КОШКА = СОБАКА</div>
-            <div class="status">✓ Решение найдено</div>
-            
-            <div class="mapping">
-                Ключ: <span>А=0, Б=9, К=5, О=6, С=1, Ш=3</span>
-            </div>
-
-            <div class="math-block">
-                <pre>
-  56350  <span class="comment">(КОШКА)</span>
-  56350  <span class="comment">(КОШКА)</span>
-+ 56350  <span class="comment">(КОШКА)</span>
-<span class="line">-------</span>
-<span class="result"> 169050</span>  <span class="comment">(СОБАКА)</span>
-                </pre>
-            </div>
-            <div class="verification">
-                Проверка: <strong>3 × 56350 = 169050</strong> ✓
-            </div>
-        </div>
-
-        <!-- Задача 5 -->
-        <div class="puzzle-card">
-            <div class="puzzle-title">СИНУС + СИНУС + КОСИНУС = ТАНГЕНС</div>
-            <div class="status">✓ Решение #1</div>
-            
-            <div class="mapping">
-                Ключ: <span>А=0, Г=6, Е=1, И=8, К=3, Н=7, О=9, С=5, Т=4, У=2</span>
-            </div>
-
-            <div class="math-block">
-                <pre>
-      58725  <span class="comment">(СИНУС)</span>
-      58725  <span class="comment">(СИНУС)</span>
-  + 3958725  <span class="comment">(КОСИНУС)</span>
-  <span class="line">---------</span>
-  <span class="result"> 4076175</span>  <span class="comment">(ТАНГЕНС)</span>
-                </pre>
-            </div>
-            <div class="verification">
-                Проверка: <strong>2 × 58725 + 3958725 = 4076175</strong> ✓
-            </div>
-        </div>
-
-        <footer style="text-align: center; color: var(--text-muted); margin-top: 50px; font-size: 0.9rem;">
-            &copy; 2023 Презентация по криптоарифметике
-        </footer>
-    </div>
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        print(f"\n{Colors.RED}Прервано пользователем.{Colors.END}")
+Нажмите, чтобы скачать или открыть презентацию:
+<a href="СетьВводный. pptx">Презентация в формате .pptx</a>
+Нажмите, чтобы скачать или открыть index.htrl:
+<a href="index.html">Файл проверки работы с кириллицей .html</a>
+</p>
 
 </body>
 </html>
