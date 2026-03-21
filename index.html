@@ -6,11 +6,11 @@
 <body>
 <p> 21 марта 2026
 </p>
- import math
+import math
 import time
 import sys
 
-# ANSI коды для цветов (чтобы работало везде без установки библиотек)
+# ANSI коды для цветов
 class Colors:
     PURPLE = '\033[95m'
     CYAN = '\033[96m'
@@ -34,33 +34,16 @@ def print_slow(text: str, delay: float = 0.03) -> None:
 def draw_box(title: str, content: str) -> None:
     """Рисует красивую рамку вокруг текста"""
     width = 60
-    padding = 2
-    
-    # Верхняя граница
     print(f"\n{Colors.CYAN}╔{'═' * (width - 2)}╗{Colors.END}")
-    
-    # Заголовок
     title_line = f"  {Colors.BOLD}{title}{Colors.END}"
-    # Центрирование заголовка (примерное)
     print(f"{Colors.CYAN}║{Colors.END} {title_line:^{width - 4}} {Colors.CYAN}║{Colors.END}")
-    
-    # Разделитель
     print(f"{Colors.CYAN}╟{'─' * (width - 2)}╢{Colors.END}")
-    
-    # Контент
     for line in content.split('\n'):
         print(f"{Colors.CYAN}║{Colors.END}  {line:<{width - 6}}  {Colors.CYAN}║{Colors.END}")
-        
-    # Нижняя граница
     print(f"{Colors.CYAN}╚{'═' * (width - 2)}╝{Colors.END}\n")
 
 def main() -> None:
-    # Очищаем консоль (опционально, работает не везде одинаково)
-    # os.system('cls' if os.name == 'nt' else 'clear') 
-
     title = "✨ THE BEAUTY OF NUMBERS ✨"
-    
-    # Вычисляем число. 0.69 это примерно ln(2)
     magic_number = math.log(2)
     formatted_number = f"{magic_number:.2f}"
     
@@ -75,10 +58,7 @@ def main() -> None:
     
     print_slow(f"{Colors.DARKCYAN}Загрузка модулей эстетики...{Colors.END}", 0.05)
     time.sleep(0.5)
-    
     draw_box(title, content)
-    
-    # Финальный аккорд
     print(f"{Colors.PURPLE}>>> {Colors.BOLD}0.69{Colors.END} {Colors.PURPLE}достигнуто.{Colors.END}")
 
 if __name__ == "__main__":
@@ -86,11 +66,5 @@ if __name__ == "__main__":
         main()
     except KeyboardInterrupt:
         print(f"\n{Colors.RED}Прервано пользователем.{Colors.END}")
-Нажмите, чтобы скачать или открыть презентацию:
-<a href="СетьВводный. pptx">Презентация в формате .pptx</a>
-Нажмите, чтобы скачать или открыть index.htrl:
-<a href="index.html">Файл проверки работы с кириллицей .html</a>
-</p>
-
 </body>
 </html>
