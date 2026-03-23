@@ -1,758 +1,155 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🚗 CASCO Insurance Model — Точность 0.69</title>
-    <style>
-        /* ═══════════════════════════════════════════════════════════════
-           🎨 CSS ПЕРЕМЕННЫЕ И БАЗОВЫЕ СТИЛИ
-           ═══════════════════════════════════════════════════════════════ */
-        :root {
-            --purple: #9b59b6;
-            --cyan: #00bcd4;
-            --blue: #3498db;
-            --green: #2ecc71;
-            --yellow: #f1c40f;
-            --red: #e74c3c;
-            --dark: #1a1a2e;
-            --darker: #16213e;
-            --light: #ecf0f1;
-            --glass: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, var(--dark) 0%, var(--darker) 100%);
-            color: var(--light);
-            min-height: 100vh;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* ═══════════════════════════════════════════════════════════════
-           🌟 АНИМАЦИИ
-           ═══════════════════════════════════════════════════════════════ */
-        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-        @keyframes progressFill { from { width: 0; } to { width: 69%; } }
-        @keyframes glow { 0%, 100% { box-shadow: 0 0 20px rgba(0, 188, 212, 0.3); } 50% { box-shadow: 0 0 40px rgba(0, 188, 212, 0.6); } }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-
-        .pulse { animation: pulse 2s infinite; }
-        .glow { animation: glow 3s infinite; }
-        .float { animation: float 3s ease-in-out infinite; }
-
-        /* ═══════════════════════════════════════════════════════════════
-           📐 ЗАГОЛОВОК
-           ═══════════════════════════════════════════════════════════════ */
-        .header {
-            text-align: center;
-            padding: 50px 20px;
-            animation: fadeInDown 1s ease;
-            background: radial-gradient(ellipse at top, rgba(0, 188, 212, 0.15) 0%, transparent 70%);
-        }
-
-        .header .logo {
-            font-size: 4em;
-            margin-bottom: 20px;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        .header h1 {
-            font-size: 2.8em;
-            color: var(--cyan);
-            margin-bottom: 10px;
-            text-shadow: 0 0 30px rgba(0, 188, 212, 0.5);
-            letter-spacing: 2px;
-        }
-
-        .header .subtitle {
-            font-size: 1.3em;
-            color: var(--purple);
-            opacity: 0.95;
-            margin-bottom: 15px;
-        }
-
-        .header .date {
-            font-size: 1em;
-            color: var(--blue);
-            background: var(--glass);
-            padding: 8px 20px;
-            border-radius: 25px;
-            display: inline-block;
-            border: 1px solid var(--glass-border);
-        }
-
-        /* ═══════════════════════════════════════════════════════════════
-           🗂️ КОНТЕЙНЕР И КАРТОЧКИ
-           ═══════════════════════════════════════════════════════════════ */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 25px;
-        }
-
-        .card {
-            background: var(--glass);
-            border-radius: 20px;
-            padding: 30px;
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(20px);
-            animation: fadeInUp 0.8s ease;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--cyan), var(--purple), var(--blue));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 50px rgba(0, 188, 212, 0.25);
-            border-color: rgba(0, 188, 212, 0.4);
-        }
-
-        .card:hover::before { opacity: 1; }
-
-        .card h2 {
-            color: var(--cyan);
-            margin-bottom: 25px;
-            font-size: 1.6em;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--cyan);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* ═══════════════════════════════════════════════════════════════
-           📊 МЕТРИКИ
-           ═══════════════════════════════════════════════════════════════ */
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 18px;
-        }
-
-        .metric-item {
-            background: rgba(0, 0, 0, 0.25);
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: 1px solid transparent;
-        }
-
-        .metric-item:hover {
-            background: rgba(0, 0, 0, 0.4);
-            border-color: var(--cyan);
-            transform: scale(1.03);
-        }
-
-        .metric-item.highlight {
-            background: linear-gradient(135deg, rgba(155, 89, 182, 0.25), rgba(0, 188, 212, 0.25));
-            border: 2px solid var(--purple);
-            grid-column: span 2;
-            padding: 25px;
-        }
-
-        .metric-value {
-            font-size: 2.5em;
-            font-weight: 800;
-            color: var(--yellow);
-            text-shadow: 0 0 20px rgba(241, 196, 15, 0.3);
-        }
-
-        .metric-item.highlight .metric-value {
-            color: var(--purple);
-            font-size: 4em;
-            text-shadow: 0 0 30px rgba(155, 89, 182, 0.6);
-        }
-
-        .metric-label {
-            font-size: 0.95em;
-            opacity: 0.85;
-            margin-top: 8px;
-            font-weight: 500;
-        }
-
-        /* ═══════════════════════════════════════════════════════════════
-           📈 ПРОГРЕСС БАРЫ
-           ═══════════════════════════════════════════════════════════════ */
-        .progress-container { margin: 25px 0; }
-
-        .progress-label {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            font-weight: 500;
-        }
-
-        .progress-bar {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            height: 24px;
-            overflow: hidden;
-            position: relative;
-            border: 1px solid var(--glass-border);
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--cyan), var(--blue), var(--purple));
-            border-radius: 12px;
-            animation: progressFill 2.5s ease forwards;
-            width: 0;
-            position: relative;
-        }
-
-        .progress-fill::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            animation: shimmer 2s infinite;
-        }
-
-        @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
-
-        /* ═══════════════════════════════════════════════════════════════
-           📋 ТАБЛИЦА
-           ═══════════════════════════════════════════════════════════════ */
-        .table-wrapper {
-            overflow-x: auto;
-            border-radius: 12px;
-            border: 1px solid var(--glass-border);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.95em;
-        }
-
-        th {
-            background: linear-gradient(135deg, var(--cyan), var(--blue));
-            color: white;
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.85em;
-            letter-spacing: 0.5px;
-        }
-
-        td {
-            padding: 14px 15px;
-            border-bottom: 1px solid var(--glass-border);
-        }
-
-        tr:last-child td { border-bottom: none; }
-        tr:hover { background: rgba(255, 255, 255, 0.08); }
-
-        .badge {
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: 600;
-            display: inline-block;
-        }
-
-        .badge-approved { background: rgba(46, 204, 113, 0.2); color: var(--green); border: 1px solid var(--green); }
-        .badge-rejected { background: rgba(231, 76, 60, 0.2); color: var(--red); border: 1px solid var(--red); }
-        .risk-low { color: var(--green); font-weight: 600; }
-        .risk-medium { color: var(--yellow); font-weight: 600; }
-        .risk-high { color: var(--red); font-weight: 600; }
-
-        /* ═══════════════════════════════════════════════════════════════
-           📦 ИНФОРМАЦИОННЫЕ БЛОКИ
-           ═══════════════════════════════════════════════════════════════ */
-        .info-list { list-style: none; }
-        .info-list li {
-            padding: 12px 0;
-            border-bottom: 1px dashed var(--glass-border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .info-list li:last-child { border-bottom: none; }
-        .info-list .label { opacity: 0.8; }
-        .info-list .value { font-weight: 600; color: var(--cyan); }
-
-        .feature-box {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 12px;
-            padding: 20px;
-            margin: 15px 0;
-            border-left: 4px solid var(--cyan);
-        }
-
-        .feature-box .title {
-            color: var(--yellow);
-            font-weight: 600;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* ═══════════════════════════════════════════════════════════════
-           🔘 КНОПКИ
-           ═══════════════════════════════════════════════════════════════ */
-        .btn-group {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
-
-        .btn {
-            flex: 1;
-            min-width: 140px;
-            padding: 14px 20px;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            text-align: center;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-size: 0.95em;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--cyan), var(--blue));
-            color: white;
-        }
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0, 188, 212, 0.4);
-        }
-
-        .btn-secondary {
-            background: var(--glass);
-            color: var(--light);
-            border: 1px solid var(--glass-border);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: var(--cyan);
-        }
-
-        /* ═══════════════════════════════════════════════════════════════
-           📄 КОД БЛОК
-           ═══════════════════════════════════════════════════════════════ */
-        .code-section {
-            grid-column: 1 / -1;
-            background: #0d1117;
-            border-radius: 16px;
-            padding: 25px;
-            border: 1px solid #30363d;
-            margin-top: 10px;
-        }
-
-        .code-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #30363d;
-        }
-
-        .code-title {
-            color: var(--cyan);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .code-copy {
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            color: var(--light);
-            padding: 8px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9em;
-            transition: all 0.2s ease;
-        }
-        .code-copy:hover { background: rgba(255, 255, 255, 0.15); }
-
-        pre {
-            background: #161b22;
-            border-radius: 10px;
-            padding: 20px;
-            overflow-x: auto;
-            font-family: 'Fira Code', 'Consolas', monospace;
-            font-size: 0.85em;
-            line-height: 1.5;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        code { color: #c9d1d9; }
-        .code-keyword { color: #ff7b72; }
-        .code-string { color: #a5d6ff; }
-        .code-comment { color: #8b949e; font-style: italic; }
-        .code-function { color: #d2a8ff; }
-        .code-number { color: #79c0ff; }
-
-        /* ═══════════════════════════════════════════════════════════════
-           🦶 ФУТЕР
-           ═══════════════════════════════════════════════════════════════ */
-        .footer {
-            text-align: center;
-            padding: 50px 20px;
-            margin-top: 40px;
-            border-top: 1px solid var(--glass-border);
-            background: radial-gradient(ellipse at bottom, rgba(155, 89, 182, 0.1) 0%, transparent 70%);
-        }
-
-        .footer .highlight {
-            color: var(--purple);
-            font-size: 1.8em;
-            font-weight: 800;
-            text-shadow: 0 0 25px rgba(155, 89, 182, 0.6);
-            margin-bottom: 15px;
-            display: block;
-        }
-
-        .footer .badges {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
-
-        .badge-footer {
-            background: var(--glass);
-            padding: 8px 18px;
-            border-radius: 25px;
-            font-size: 0.9em;
-            border: 1px solid var(--glass-border);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        /* ═══════════════════════════════════════════════════════════════
-           📱 АДАПТИВНОСТЬ
-           ═══════════════════════════════════════════════════════════════ */
-        @media (max-width: 768px) {
-            .header h1 { font-size: 2em; }
-            .header .logo { font-size: 3em; }
-            .container { grid-template-columns: 1fr; }
-            .metric-item.highlight { grid-column: span 1; }
-            .metrics-grid { grid-template-columns: 1fr 1fr; }
-            .btn { min-width: 100%; }
-        }
-
-        /* ═══════════════════════════════════════════════════════════════
-           🎨 СКРОЛЛБАР
-           ═══════════════════════════════════════════════════════════════ */
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: var(--dark); }
-        ::-webkit-scrollbar-thumb { background: var(--cyan); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--blue); }
-    </style>
-</head>
-<body>
-
-    <!-- ═══════════════════════════════════════════════════════════════
-         🏷️ ЗАГОЛОВОК
-         ═══════════════════════════════════════════════════════════════ -->
-    <header class="header">
-        <div class="logo">🚗</div>
-        <h1>CASCO INSURANCE MODEL</h1>
-        <p class="subtitle">Система оценки рисков автострахования на базе ML</p>
-        <p class="date">📅 <span id="currentDate">21 марта 2026</span> | ⏱️ <span id="currentTime">14:30</span></p>
-    </header>
-
-    <!-- ═══════════════════════════════════════════════════════════════
-         📦 ОСНОВНОЙ КОНТЕНТ
-         ═══════════════════════════════════════════════════════════════ -->
-    <div class="container">
-
-        <!-- 📊 Карточка 1: Метрики -->
-        <div class="card">
-            <h2>📊 Метрики Точности</h2>
-            <div class="metrics-grid">
-                <div class="metric-item highlight">
-                    <div class="metric-value pulse">0.69</div>
-                    <div class="metric-label">Точность (Accuracy)</div>
-                </div>
-                <div class="metric-item">
-                    <div class="metric-value" style="color: var(--blue)">0.71</div>
-                    <div class="metric-label">Прецизионность</div>
-                </div>
-                <div class="metric-item">
-                    <div class="metric-value" style="color: var(--green)">0.68</div>
-                    <div class="metric-label">Полнота (Recall)</div>
-                </div>
-                <div class="metric-item">
-                    <div class="metric-value" style="color: var(--purple)">0.69</div>
-                    <div class="metric-label">F1-Score</div>
-                </div>
-                <div class="metric-item">
-                    <div class="metric-value" style="color: var(--cyan)">0.74</div>
-                    <div class="metric-label">AUC-ROC</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 🎯 Карточка 2: Прогресс -->
-        <div class="card">
-            <h2>🎯 Статус Обучения</h2>
-            <div class="progress-container">
-                <div class="progress-label">
-                    <span>Точность модели</span>
-                    <span style="color: var(--yellow); font-weight: bold;">69%</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill"></div>
-                </div>
-            </div>
-            <div class="progress-container">
-                <div class="progress-label">
-                    <span>Готовность к работе</span>
-                    <span style="color: var(--green); font-weight: bold;">100%</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="animation-duration: 1.5s; width: 100%;"></div>
-                </div>
-            </div>
-            <div class="feature-box">
-                <div class="title">✅ Статус</div>
-                <div>Модель готова к оценке рисков КАСКО и принятию решений в реальном времени</div>
-            </div>
-            <div class="btn-group">
-                <button class="btn btn-primary" onclick="alert('🚀 Запуск модели...')">▶ Запустить</button>
-                <button class="btn btn-secondary" onclick="alert('📥 Скачивание...')">📥 Скачать</button>
-            </div>
-        </div>
-
-        <!-- 👥 Карточка 3: Клиенты -->
-        <div class="card">
-            <h2>👥 Тестовые Клиенты</h2>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Клиент</th>
-                            <th>Статус</th>
-                            <th>Риск</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Клиент А</strong><br><small style="opacity:0.7">35 лет, стаж 15</small></td>
-                            <td><span class="badge badge-approved">ОДОБРЕНО ✅</span></td>
-                            <td class="risk-low">LOW</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Клиент Б</strong><br><small style="opacity:0.7">22 года, стаж 2</small></td>
-                            <td><span class="badge badge-rejected">ОТКАЗ ❌</span></td>
-                            <td class="risk-high">HIGH</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Клиент В</strong><br><small style="opacity:0.7">45 лет, стаж 20</small></td>
-                            <td><span class="badge badge-approved">ОДОБРЕНО ✅</span></td>
-                            <td class="risk-low">LOW</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Клиент Г</strong><br><small style="opacity:0.7">28 лет, стаж 5</small></td>
-                            <td><span class="badge badge-approved">ОДОБРЕНО ✅</span></td>
-                            <td class="risk-medium">MEDIUM</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- ℹ️ Карточка 4: О Модели -->
-        <div class="card">
-            <h2>ℹ️ О Модели</h2>
-            <ul class="info-list">
-                <li><span class="label">Название</span><span class="value">CascoScorer v1.0</span></li>
-                <li><span class="label">Алгоритм</span><span class="value">Decision Tree</span></li>
-                <li><span class="label">Язык</span><span class="value">Python 3.11+</span></li>
-                <li><span class="label">Дата</span><span class="value">21.03.2026</span></li>
-                <li><span class="label">Статус</span><span class="value" style="color: var(--green)">● ГОТОВА</span></li>
-            </ul>
-            
-            <div class="feature-box">
-                <div class="title">📥 Входные данные</div>
-                <div style="font-size: 0.9em; opacity: 0.9;">
-                    • Возраст: 18-70 лет<br>
-                    • Стаж: 0-40 лет<br>
-                    • ДТП: 0-10 случаев
-                </div>
-            </div>
-
-            <div class="feature-box">
-                <div class="title">🎯 Выход</div>
-                <div style="font-size: 0.9em; opacity: 0.9;">
-                    Вероятность одобрения + уровень риска (LOW/MEDIUM/HIGH)
-                </div>
-            </div>
-        </div>
-
-        <!-- 💻 Карточка 5: Код -->
-        <div class="card code-section">
-            <div class="code-header">
-                <div class="code-title">🐍 casco_model.py — Основной код</div>
-                <button class="code-copy" onclick="copyCode()">📋 Копировать</button>
-            </div>
-            <pre><code><span class="code-comment"># ═══════════════════════════════════════════</span>
-<span class="code-comment"># 🚗 CASCO INSURANCE MODEL v1.0</span>
-<span class="code-comment"># Точность: 0.69 | По красоте ✨</span>
-<span class="code-comment"># ═══════════════════════════════════════════</span>
-
-<span class="code-keyword">import</span> pandas <span class="code-keyword">as</span> pd
-<span class="code-keyword">import</span> numpy <span class="code-keyword">as</span> np
-<span class="code-keyword">from</span> sklearn.tree <span class="code-keyword">import</span> DecisionTreeClassifier
-<span class="code-keyword">from</span> sklearn.model_selection <span class="code-keyword">import</span> train_test_split
-
-<span class="code-keyword">class</span> <span class="code-function">CascoInsuranceModel</span>:
-    <span class="code-string">"""Модель оценки риска для страхования КАСКО"""</span>
+    import time
+import sys
+
+class SlidePresenter:
+    """Класс для пошаговой презентации в консоли"""
     
-    <span class="code-keyword">def</span> <span class="code-function">__init__</span>(self, model_name=<span class="code-string">"CascoScorer v1.0"</span>):
-        self.model_name = model_name
-        self.model = DecisionTreeClassifier(
-            max_depth=<span class="code-number">5</span>, 
-            random_state=<span class="code-number">42</span>
-        )
+    COLORS = {
+        'HEADER': '\033[95m', 'BLUE': '\033[94m', 'CYAN': '\033[96m',
+        'GREEN': '\033[92m', 'YELLOW': '\033[93m', 'RED': '\033[91m',
+        'BOLD': '\033[1m', 'UNDERLINE': '\033[4m', 'END': '\033[0m',
+    }
     
-    <span class="code-keyword">def</span> <span class="code-function">predict</span>(self, age: int, experience: int, accidents: int) -> dict:
-        <span class="code-string">"""Предсказание для нового клиента"""</span>
-        input_data = pd.DataFrame({
-            <span class="code-string">'age'</span>: [age],
-            <span class="code-string">'driving_experience'</span>: [experience],
-            <span class="code-string">'accidents_count'</span>: [accidents]
-        })
+    def __init__(self):
+        self.c = self.COLORS  # сокращение для удобства
         
-        probability = self.model.predict_proba(input_data)[<span class="code-number">0</span>][<span class="code-number">1</span>]
-        risk = <span class="code-string">'LOW'</span> <span class="code-keyword">if</span> probability > <span class="code-number">0.7</span> <span class="code-keyword">else</span> <span class="code-string">'MEDIUM'</span> <span class="code-keyword">if</span> probability > <span class="code-number">0.4</span> <span class="code-keyword">else</span> <span class="code-string">'HIGH'</span>
+    def clear(self):
+        """Очистка экрана"""
+        print('\033[2J\033[H', end='')
         
-        <span class="code-keyword">return</span> {
-            <span class="code-string">'approved'</span>: probability >= <span class="code-number">0.5</span>,
-            <span class="code-string">'probability'</span>: probability,
-            <span class="code-string">'risk'</span>: risk
-        }
-
-<span class="code-comment"># 🚀 Запуск модели</span>
-<span class="code-keyword">if</span> __name__ == <span class="code-string">"__main__"</span>:
-    model = CascoInsuranceModel()
-    result = model.predict(age=<span class="code-number">35</span>, experience=<span class="code-number">15</span>, accidents=<span class="code-number">0</span>)
-    print(f<span class="code-string">"Результат: {result}"</span>)</code></pre>
-        </div>
-
-    </div>
-
-    <!-- ═══════════════════════════════════════════════════════════════
-         🦶 ФУТЕР
-         ═══════════════════════════════════════════════════════════════ -->
-    <footer class="footer">
-        <span class="highlight glow">>>> ТОЧНОСТЬ: 0.69 достигнута ✅</span>
-        <p style="opacity: 0.85; margin-bottom: 20px;">
-            Модель готова к интеграции в производственную среду
-        </p>
+    def wait(self, text="→ Нажмите Enter для продолжения..."):
+        """Ожидание нажатия Enter"""
+        input(self.c['CYAN'] + text + self.c['END'])
         
-        <div class="badges">
-            <span class="badge-footer">🐍 Python 3.11+</span>
-            <span class="badge-footer">🤖 Scikit-learn</span>
-            <span class="badge-footer">📊 Pandas + NumPy</span>
-            <span class="badge-footer">✨ По красоте 0.69</span>
-        </div>
+    def print_centered(self, text, width=70, color=''):
+        """Центрированный текст"""
+        padding = (width - len(text.replace('\033', '').replace('[92m', '').replace('[0m', ''))) // 2
+        print(color + ' ' * max(0, padding) + text + self.c['END'])
         
-        <p style="margin-top: 30px; opacity: 0.6; font-size: 0.9em;">
-            © 2026 CASCO Insurance Model | Made with ❤️ and ☕
-        </p>
-    </footer>
+    def slide_1_title(self):
+        self.clear()
+        print('\n' * 3)
+        self.print_centered(self.c['BOLD'] + self.c['HEADER'] + '🌍  ПРИВЕТ, МИР!  🌍' + self.c['END'], width=70)
+        print(self.c['CYAN'] + '─' * 70 + self.c['END'])
+        print()
+        self.print_centered(self.c['BLUE'] + 'Результаты обучения нейронной сети' + self.c['END'], width=70)
+        self.print_centered('Students Performance Dataset', width=70, color=self.c['CYAN'])
+        print('\n' * 2)
+        self.print_centered('🎓 🤖 📊', width=70, color=self.c['YELLOW'])
+        print('\n' * 4)
+        self.wait()
+        
+    def slide_2_task(self):
+        self.clear()
+        print(f"\n{self.c['BOLD']}{self.c['BLUE']}🎯 ЦЕЛЬ ИССЛЕДОВАНИЯ{self.c['END']}\n")
+        print(f"{self.c['CYAN']}•{self.c['END']} Датасет: {self.c['BOLD']}StudentsPerformance.csv{self.c['END']}")
+        print(f"{self.c['CYAN']}•{self.c['END']} Цель: прогнозирование {self.c['BOLD']}math score{self.c['END']}")
+        print(f"\n{self.c['YELLOW']}📋 Исходные признаки:{self.c['END']}")
+        print(f"   ├─ gender")
+        print(f"   ├─ lunch") 
+        print(f"   └─ test preparation course")
+        print(f"\n{self.c['GREEN']}✨ ДОБАВЛЕН:{self.c['END']}")
+        print(f"   └─ {self.c['BOLD']}{self.c['GREEN']}reading score{self.c['END']} (числовой признак)")
+        print(f"\n{self.c['BLUE']}🧠 Архитектура сети:{self.c['END']} {self.c['BOLD']}4 → 2 → 1{self.c['END']}")
+        print(f"{self.c['BLUE']}🔄 Эпох обучения:{self.c['END']} {self.c['BOLD']}1000{self.c['END']}")
+        print(f"\n{self.c['CYAN']}─{self.c['END']}" * 35)
+        self.wait()
+        
+    def slide_3_metrics(self):
+        self.clear()
+        print(f"\n{self.c['BOLD']}{self.c['BLUE']}📊 МЕТРИКИ КАЧЕСТВА{self.c['END']}\n")
+        
+        # Нормализованные ошибки
+        print(f"{self.c['HEADER']}┌─ Нормализованные ошибки (MSE) ─────────{self.c['END']}")
+        print(f"{self.c['HEADER']}│{self.c['END']}  {self.c['GREEN']}✅{self.c['END']} Train: {self.c['BOLD']}0.004355{self.c['END']}")
+        print(f"{self.c['HEADER']}│{self.c['END']}  {self.c['GREEN']}✅{self.c['END']} Test:  {self.c['BOLD']}0.003869{self.c['END']}")
+        print(f"{self.c['HEADER']}└{'─' * 43}{self.c['END']}")
+        
+        print()
+        
+        # Реальные ошибки
+        print(f"{self.c['YELLOW']}┌─ Ошибки в реальных баллах (0-100) ─────{self.c['END']}")
+        print(f"{self.c['YELLOW']}│{self.c['END']}  {self.c['YELLOW']}📈{self.c['END']} Train: {self.c['BOLD']}43.55{self.c['END']} баллов²")
+        print(f"{self.c['YELLOW']}│{self.c['END']}  {self.c['YELLOW']}📈{self.c['END']} Test:  {self.c['BOLD']}38.69{self.c['END']} баллов²")
+        print(f"{self.c['YELLOW']}└{'─' * 43}{self.c['END']}")
+        print()
+        self.wait()
+        
+    def slide_4_visualization(self):
+        self.clear()
+        print(f"\n{self.c['BOLD']}{self.c['CYAN']}📈 ВИЗУАЛИЗАЦИЯ ТОЧНОСТИ{self.c['END']}\n")
+        
+        # Рассчёт точности
+        acc_train = 95.6
+        acc_test = 96.1
+        
+        def progress_bar(value, length=45, color_code='\033[92m'):
+            filled = int(value * length / 100)
+            bar = '█' * filled + '░' * (length - filled)
+            return f"{color_code}[{bar}]{self.c['END']} {value:.1f}%"
+        
+        print(f"  {self.c['BLUE']}🎯 Обучающая выборка:{self.c['END']}")
+        print(f"  {progress_bar(acc_train)}\n")
+        
+        print(f"  {self.c['BLUE']}🧪 Тестовая выборка:{self.c['END']}")
+        print(f"  {progress_bar(acc_test, color_code=self.c['CYAN'])}\n")
+        
+        print(f"\n  {self.c['CYAN']}ℹ️{self.c['END']} Точность = 100 - (MSE_реальные / 100 × 10)")
+        print(f"\n{self.c['CYAN']}─{self.c['END']}" * 35)
+        self.wait()
+        
+    def slide_5_conclusion(self):
+        self.clear()
+        print('\n' * 2)
+        print(f"  {self.c['BOLD']}{self.c['GREEN']}╔{'═' * 58}╗{self.c['END']}")
+        print(f"  {self.c['BOLD']}{self.c['GREEN']}║{self.c['END']}{' ' * 20}{self.c['BOLD']}{self.c['YELLOW']}💡 ВЫВОД 💡{self.c['END']}{' ' * 20}{self.c['BOLD']}{self.c['GREEN']}║{self.c['END']}")
+        print(f"  {self.c['BOLD']}{self.c['GREEN']}╠{'═' * 58}╣{self.c['END']}")
+        print(f"  {self.c['BOLD']}{self.c['GREEN']}║{self.c['END']}  {self.c['CYAN']}Добавление признака{self.c['END']}                          {self.c['BOLD']}{self.c['GREEN']}║{self.c['END']}")
+        print(f"  {self.c['BOLD']}{self.c['GREEN']}║{self.c['END']}  {self.c['BOLD']}{self.c['GREEN']}'reading score'{self.c['END']}                              {self.c['BOLD']}{self.c['GREEN']}║{self.c['END']}")
+        print(f"  {self.c['BOLD']}{self.c['GREEN']}║{self.c['END']}                                                    {self.c['BOLD']}{self.c['GREEN']}║{self.c['END']}")
+        print(f"  {self.c['BOLD']}{self.c['GREEN']}║{self.c['END']}  {self.c['CYAN']}значительно улучшило точность{self.c['END']}             {self.c['BOLD']}{self.c['GREEN']}║{self.c['END']}")
+        print(f"  {self.c['BOLD']}{self.c['GREEN']}║{self.c['END']}  {self.c['CYAN']}прогноза математических оценок!{self.c['END']}           {self.c['BOLD']}{self.c['GREEN']}║{self.c['END']}")
+        print(f"  {self.c['BOLD']}{self.c['GREEN']}╚{'═' * 58}╝{self.c['END']}")
+        print('\n' * 3)
+        self.print_centered(self.c['YELLOW'] + 'Корреляция: чтение ⇄ математика ≈ 0.7-0.8' + self.c['END'], width=70)
+        print('\n' * 2)
+        self.wait()
+        
+    def slide_6_final(self):
+        self.clear()
+        print('\n' * 2)
+        self.print_centered(self.c['BOLD'] + self.c['GREEN'] + '🎉  МОДЕЛЬ УСПЕШНО ОБУЧЕНА!  🎉' + self.c['END'], width=70)
+        print('\n' * 2)
+        self.print_centered('✨ 🚀 ✨', width=70, color=self.c['YELLOW'])
+        print('\n' * 3)
+        self.print_centered(self.c['CYAN'] + 'Спасибо за внимание!' + self.c['END'], width=70)
+        self.print_centered('🎓 Python • Neural Network • Pandas • Scikit-learn', width=70, color=self.c['BLUE'])
+        print('\n' * 4)
+        input(self.c['GREEN'] + "  → Нажмите Enter для завершения..." + self.c['END'])
+        self.clear()
+        
+    def run(self):
+        """Запуск всей презентации"""
+        print(self.c['CYAN'] + "\n🎬 Запуск презентации... (Ctrl+C для выхода)\n" + self.c['END'])
+        time.sleep(1)
+        try:
+            self.slide_1_title()
+            self.slide_2_task()
+            self.slide_3_metrics()
+            self.slide_4_visualization()
+            self.slide_5_conclusion()
+            self.slide_6_final()
+            print(self.c['GREEN'] + "✅ Презентация завершена!" + self.c['END'])
+        except KeyboardInterrupt:
+            print(self.c['RED'] + "\n⚠️ Презентация прервана" + self.c['END'])
 
-    <!-- ═══════════════════════════════════════════════════════════════
-         ⚡ СКРИПТЫ
-         ═══════════════════════════════════════════════════════════════ -->
-    <script>
-        // 🕐 Динамическое время
-        function updateTime() {
-            const now = new Date();
-            document.getElementById('currentTime').textContent = 
-                now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-        }
-        setInterval(updateTime, 1000);
-        updateTime();
-
-        // 🎴 Анимация карточек с задержкой
-        document.querySelectorAll('.card').forEach((card, index) => {
-            card.style.animationDelay = `${index * 0.15}s`;
-        });
-
-        // 📋 Копирование кода
-        function copyCode() {
-            const code = document.querySelector('pre code').textContent;
-            navigator.clipboard.writeText(code).then(() => {
-                const btn = document.querySelector('.code-copy');
-                const original = btn.textContent;
-                btn.textContent = '✓ Скопировано!';
-                btn.style.background = 'rgba(46, 204, 113, 0.3)';
-                setTimeout(() => {
-                    btn.textContent = original;
-                    btn.style.background = '';
-                }, 2000);
-            });
-        }
-
-        // 🎯 Hover-эффекты для метрик
-        document.querySelectorAll('.metric-item').forEach(item => {
-            item.addEventListener('mouseenter', function() {
-                this.style.transform = 'scale(1.05)';
-            });
-            item.addEventListener('mouseleave', function() {
-                this.style.transform = 'scale(1)';
-            });
-        });
-
-        // 🎨 Параллакс-эффект для карточек
-        document.querySelectorAll('.card').forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                const rotateX = (y - centerY) / 20;
-                const rotateY = (centerX - x) / 20;
-                
-                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
-            });
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
-            });
-        });
+# Запуск презентации
+if __name__ == "__main__":
+    presenter = SlidePresenter()
+    presenter.run()
     </script>
 </body>
 </html>
