@@ -1,156 +1,307 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    import time
-import sys
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊 Результаты модели нейронной сети</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #fff;
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #4ade80, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .header p {
+            color: #9ca3af;
+            font-size: 1.1em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #60a5fa;
+            margin: 15px 0 30px;
+            font-size: 1.2em;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        thead {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        }
+        
+        th {
+            padding: 18px 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 1.1em;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        tbody tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        tbody tr:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+        
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+        
+        td {
+            padding: 16px 15px;
+            font-size: 1.05em;
+        }
+        
+        .metric-name {
+            font-weight: 500;
+            color: #e5e7eb;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .metric-name .emoji {
+            font-size: 1.3em;
+        }
+        
+        .metric-value {
+            font-weight: 700;
+            font-size: 1.2em;
+            color: #4ade80;
+            text-align: right;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .metric-value.highlight {
+            color: #fbbf24;
+            font-size: 1.3em;
+        }
+        
+        .info-box {
+            background: rgba(96, 165, 250, 0.15);
+            border-left: 4px solid #60a5fa;
+            padding: 15px 20px;
+            border-radius: 0 10px 10px 0;
+            margin: 20px 0;
+            font-size: 0.95em;
+            color: #bfdbfe;
+        }
+        
+        .conclusion {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2));
+            border: 2px solid #10b981;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .conclusion h3 {
+            color: #4ade80;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        
+        .conclusion p {
+            color: #d1fae5;
+            line-height: 1.6;
+            font-size: 1.1em;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            color: #6b7280;
+            font-size: 0.9em;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin: 5px;
+            color: #fff;
+        }
+        
+        .badges {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+            
+            th, td {
+                padding: 12px 10px;
+                font-size: 0.95em;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .metric-value {
+                font-size: 1.1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Заголовок -->
+        <div class="header">
+            <h1>🌍 ПРИВЕТ, МИР!</h1>
+            <p>Результаты обучения нейронной сети</p>
+        </div>
+        
+        <p class="subtitle">📊 Students Performance Dataset • Метрики качества модели</p>
+        
+        <!-- Бейджи с параметрами модели -->
+        <div class="badges">
+            <span class="badge">🧠 Архитектура: 4→2→1</span>
+            <span class="badge">🔄 Эпох: 1000</span>
+            <span class="badge">📚 Признаков: 4</span>
+            <span class="badge">⚡ Optimizer: SGD</span>
+        </div>
+        
+        <!-- Таблица результатов -->
+        <table>
+            <thead>
+                <tr>
+                    <th>📋 Метрика</th>
+                    <th style="text-align: right;">💯 Значение</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="metric-name"><span class="emoji">✅</span> Ошибка на обучении (MSE нормализованная)</td>
+                    <td class="metric-value">0.004355</td>
+                </tr>
+                <tr>
+                    <td class="metric-name"><span class="emoji">✅</span> Ошибка на тесте (MSE нормализованная)</td>
+                    <td class="metric-value">0.003869</td>
+                </tr>
+                <tr style="background: rgba(255,255,255,0.03);">
+                    <td class="metric-name"><span class="emoji">📈</span> Ошибка на обучении (в реальных баллах)</td>
+                    <td class="metric-value highlight">43.55</td>
+                </tr>
+                <tr>
+                    <td class="metric-name"><span class="emoji">📈</span> Ошибка на тесте (в реальных баллах)</td>
+                    <td class="metric-value highlight">38.69</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Пояснение -->
+        <div class="info-box">
+            <strong>ℹ️ Пояснение:</strong><br>
+            • Нормализованная MSE: значения в диапазоне [0, 1] после MinMaxScaler<br>
+            • Реальные баллы: ошибка в исходных единицах измерения (0–100 баллов)<br>
+            • Признаки модели: gender, lunch, test preparation course, <strong>reading score</strong> ✨
+        </div>
+        
+        <!-- Вывод -->
+        <div class="conclusion">
+            <h3>💡 КЛЮЧЕВОЙ ВЫВОД</h3>
+            <p>
+                Добавление числового признака <strong>"reading score"</strong><br>
+                значительно улучшило точность прогноза математических оценок!<br><br>
+                <em>Корреляция между чтением и математикой: ≈ 0.7–0.8</em>
+            </p>
+        </div>
+        
+        <!-- Футер -->
+        <div class="footer">
+            <p>🎓 Python • Pandas • Scikit-learn • Neural Network</p>
+            <p style="margin-top: 8px;">🔗 StudentsPerformance.csv • MSE Loss • Sigmoid Activation</p>
+        </div>
+    </div>
 
-class SlidePresenter:
-    """Класс для пошаговой презентации в консоли"""
-    
-    COLORS = {
-        'HEADER': '\033[95m', 'BLUE': '\033[94m', 'CYAN': '\033[96m',
-        'GREEN': '\033[92m', 'YELLOW': '\033[93m', 'RED': '\033[91m',
-        'BOLD': '\033[1m', 'UNDERLINE': '\033[4m', 'END': '\033[0m',
-    }
-    
-    def __init__(self):
-        self.c = self.COLORS  # сокращение для удобства
-        
-    def clear(self):
-        """Очистка экрана"""
-        print('\033[2J\033[H', end='')
-        
-    def wait(self, text="→ Нажмите Enter для продолжения..."):
-        """Ожидание нажатия Enter"""
-        input(self.c['CYAN'] + text + self.c['END'])
-        
-    def print_centered(self, text, width=70, color=''):
-        """Центрированный текст"""
-        padding = (width - len(text.replace('\033', '').replace('[92m', '').replace('[0m', ''))) // 2
-        print(color + ' ' * max(0, padding) + text + self.c['END'])
-        
-    def slide_1_title(self):
-        self.clear()
-        print('\n' * 3)
-        self.print_centered(self.c['BOLD'] + self.c['HEADER'] + '🌍  ПРИВЕТ, МИР!  🌍' + self.c['END'], width=70)
-        print(self.c['CYAN'] + '─' * 70 + self.c['END'])
-        print()
-        self.print_centered(self.c['BLUE'] + 'Результаты обучения нейронной сети' + self.c['END'], width=70)
-        self.print_centered('Students Performance Dataset', width=70, color=self.c['CYAN'])
-        print('\n' * 2)
-        self.print_centered('🎓 🤖 📊', width=70, color=self.c['YELLOW'])
-        print('\n' * 4)
-        self.wait()
-        
-    def slide_2_task(self):
-        self.clear()
-        print(f"\n{self.c['BOLD']}{self.c['BLUE']}🎯 ЦЕЛЬ ИССЛЕДОВАНИЯ{self.c['END']}\n")
-        print(f"{self.c['CYAN']}•{self.c['END']} Датасет: {self.c['BOLD']}StudentsPerformance.csv{self.c['END']}")
-        print(f"{self.c['CYAN']}•{self.c['END']} Цель: прогнозирование {self.c['BOLD']}math score{self.c['END']}")
-        print(f"\n{self.c['YELLOW']}📋 Исходные признаки:{self.c['END']}")
-        print(f"   ├─ gender")
-        print(f"   ├─ lunch") 
-        print(f"   └─ test preparation course")
-        print(f"\n{self.c['GREEN']}✨ ДОБАВЛЕН:{self.c['END']}")
-        print(f"   └─ {self.c['BOLD']}{self.c['GREEN']}reading score{self.c['END']} (числовой признак)")
-        print(f"\n{self.c['BLUE']}🧠 Архитектура сети:{self.c['END']} {self.c['BOLD']}4 → 2 → 1{self.c['END']}")
-        print(f"{self.c['BLUE']}🔄 Эпох обучения:{self.c['END']} {self.c['BOLD']}1000{self.c['END']}")
-        print(f"\n{self.c['CYAN']}─{self.c['END']}" * 35)
-        self.wait()
-        
-    def slide_3_metrics(self):
-        self.clear()
-        print(f"\n{self.c['BOLD']}{self.c['BLUE']}📊 МЕТРИКИ КАЧЕСТВА{self.c['END']}\n")
-        
-        # Нормализованные ошибки
-        print(f"{self.c['HEADER']}┌─ Нормализованные ошибки (MSE) ─────────{self.c['END']}")
-        print(f"{self.c['HEADER']}│{self.c['END']}  {self.c['GREEN']}✅{self.c['END']} Train: {self.c['BOLD']}0.004355{self.c['END']}")
-        print(f"{self.c['HEADER']}│{self.c['END']}  {self.c['GREEN']}✅{self.c['END']} Test:  {self.c['BOLD']}0.003869{self.c['END']}")
-        print(f"{self.c['HEADER']}└{'─' * 43}{self.c['END']}")
-        
-        print()
-        
-        # Реальные ошибки
-        print(f"{self.c['YELLOW']}┌─ Ошибки в реальных баллах (0-100) ─────{self.c['END']}")
-        print(f"{self.c['YELLOW']}│{self.c['END']}  {self.c['YELLOW']}📈{self.c['END']} Train: {self.c['BOLD']}43.55{self.c['END']} баллов²")
-        print(f"{self.c['YELLOW']}│{self.c['END']}  {self.c['YELLOW']}📈{self.c['END']} Test:  {self.c['BOLD']}38.69{self.c['END']} баллов²")
-        print(f"{self.c['YELLOW']}└{'─' * 43}{self.c['END']}")
-        print()
-        self.wait()
-        
-    def slide_4_visualization(self):
-        self.clear()
-        print(f"\n{self.c['BOLD']}{self.c['CYAN']}📈 ВИЗУАЛИЗАЦИЯ ТОЧНОСТИ{self.c['END']}\n")
-        
-        # Рассчёт точности
-        acc_train = 95.6
-        acc_test = 96.1
-        
-        def progress_bar(value, length=45, color_code='\033[92m'):
-            filled = int(value * length / 100)
-            bar = '█' * filled + '░' * (length - filled)
-            return f"{color_code}[{bar}]{self.c['END']} {value:.1f}%"
-        
-        print(f"  {self.c['BLUE']}🎯 Обучающая выборка:{self.c['END']}")
-        print(f"  {progress_bar(acc_train)}\n")
-        
-        print(f"  {self.c['BLUE']}🧪 Тестовая выборка:{self.c['END']}")
-        print(f"  {progress_bar(acc_test, color_code=self.c['CYAN'])}\n")
-        
-        print(f"\n  {self.c['CYAN']}ℹ️{self.c['END']} Точность = 100 - (MSE_реальные / 100 × 10)")
-        print(f"\n{self.c['CYAN']}─{self.c['END']}" * 35)
-        self.wait()
-        
-    def slide_5_conclusion(self):
-        self.clear()
-        print('\n' * 2)
-        print(f"  {self.c['BOLD']}{self.c['GREEN']}╔{'═' * 58}╗{self.c['END']}")
-        print(f"  {self.c['BOLD']}{self.c['GREEN']}║{self.c['END']}{' ' * 20}{self.c['BOLD']}{self.c['YELLOW']}💡 ВЫВОД 💡{self.c['END']}{' ' * 20}{self.c['BOLD']}{self.c['GREEN']}║{self.c['END']}")
-        print(f"  {self.c['BOLD']}{self.c['GREEN']}╠{'═' * 58}╣{self.c['END']}")
-        print(f"  {self.c['BOLD']}{self.c['GREEN']}║{self.c['END']}  {self.c['CYAN']}Добавление признака{self.c['END']}                          {self.c['BOLD']}{self.c['GREEN']}║{self.c['END']}")
-        print(f"  {self.c['BOLD']}{self.c['GREEN']}║{self.c['END']}  {self.c['BOLD']}{self.c['GREEN']}'reading score'{self.c['END']}                              {self.c['BOLD']}{self.c['GREEN']}║{self.c['END']}")
-        print(f"  {self.c['BOLD']}{self.c['GREEN']}║{self.c['END']}                                                    {self.c['BOLD']}{self.c['GREEN']}║{self.c['END']}")
-        print(f"  {self.c['BOLD']}{self.c['GREEN']}║{self.c['END']}  {self.c['CYAN']}значительно улучшило точность{self.c['END']}             {self.c['BOLD']}{self.c['GREEN']}║{self.c['END']}")
-        print(f"  {self.c['BOLD']}{self.c['GREEN']}║{self.c['END']}  {self.c['CYAN']}прогноза математических оценок!{self.c['END']}           {self.c['BOLD']}{self.c['GREEN']}║{self.c['END']}")
-        print(f"  {self.c['BOLD']}{self.c['GREEN']}╚{'═' * 58}╝{self.c['END']}")
-        print('\n' * 3)
-        self.print_centered(self.c['YELLOW'] + 'Корреляция: чтение ⇄ математика ≈ 0.7-0.8' + self.c['END'], width=70)
-        print('\n' * 2)
-        self.wait()
-        
-    def slide_6_final(self):
-        self.clear()
-        print('\n' * 2)
-        self.print_centered(self.c['BOLD'] + self.c['GREEN'] + '🎉  МОДЕЛЬ УСПЕШНО ОБУЧЕНА!  🎉' + self.c['END'], width=70)
-        print('\n' * 2)
-        self.print_centered('✨ 🚀 ✨', width=70, color=self.c['YELLOW'])
-        print('\n' * 3)
-        self.print_centered(self.c['CYAN'] + 'Спасибо за внимание!' + self.c['END'], width=70)
-        self.print_centered('🎓 Python • Neural Network • Pandas • Scikit-learn', width=70, color=self.c['BLUE'])
-        print('\n' * 4)
-        input(self.c['GREEN'] + "  → Нажмите Enter для завершения..." + self.c['END'])
-        self.clear()
-        
-    def run(self):
-        """Запуск всей презентации"""
-        print(self.c['CYAN'] + "\n🎬 Запуск презентации... (Ctrl+C для выхода)\n" + self.c['END'])
-        time.sleep(1)
-        try:
-            self.slide_1_title()
-            self.slide_2_task()
-            self.slide_3_metrics()
-            self.slide_4_visualization()
-            self.slide_5_conclusion()
-            self.slide_6_final()
-            print(self.c['GREEN'] + "✅ Презентация завершена!" + self.c['END'])
-        except KeyboardInterrupt:
-            print(self.c['RED'] + "\n⚠️ Презентация прервана" + self.c['END'])
-
-# Запуск презентации
-if __name__ == "__main__":
-    presenter = SlidePresenter()
-    presenter.run()
+    <!-- Анимация появления таблицы -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const rows = document.querySelectorAll('tbody tr');
+            rows.forEach((row, index) => {
+                row.style.opacity = '0';
+                row.style.transform = 'translateY(20px)';
+                row.style.transition = 'all 0.5s ease';
+                
+                setTimeout(() => {
+                    row.style.opacity = '1';
+                    row.style.transform = 'translateY(0)';
+                }, 300 + index * 150);
+            });
+            
+            // Анимация заголовка
+            const header = document.querySelector('.header h1');
+            header.style.opacity = '0';
+            header.style.transform = 'translateY(-20px)';
+            header.style.transition = 'all 0.8s ease';
+            setTimeout(() => {
+                header.style.opacity = '1';
+                header.style.transform = 'translateY(0)';
+            }, 200);
+        });
     </script>
 </body>
+</html>
 </html>
     
