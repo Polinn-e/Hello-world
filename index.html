@@ -1,15 +1,35 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Привет, мир!</title>
-</head>
-<body>
-    <h1>Привет, мир!</h1>
-    <a href="dental_database.png" target="_blank">
-        <img src="dental_database.png" alt="База данных стоматологии" width="800">
-    </a>
-    <p>Схема базы данных стоматологической клиники</p>
-    <p><a href="dental_database.png" download>Скачать изображение</a></p>
-</body>
-</html>
+# -*- coding: utf-8 -*-
+"""
+Программа: Привет Мир
+Дата: 4 мая 2026 года
+Автор: Qwen3.6
+"""
+
+from datetime import datetime
+
+def main():
+    print("=" * 50)
+    print("ПРИВЕТ МИР!")
+    print("=" * 50)
+    print(f"Дата создания: 4 мая 2026 года")
+    print(f"Текущая дата: {datetime.now().strftime('%d.%m.%Y')}")
+    print("-" * 50)
+    print("Связанные файлы:")
+    print("-" * 50)
+    
+    files = [
+        "Новая таблица 1.xlsx",
+        "Таблица2.ods",
+        "_таблица 3 задание.xlsx",
+        "Новая таблица 4.xlsx"
+    ]
+    
+    for i, file in enumerate(files, 1):
+        print(f"{i}. {file}")
+    
+    print("=" * 50)
+    print("Программа завершена успешно!")
+    print("=" * 50)
+
+if __name__ == "__main__":
+    main()
