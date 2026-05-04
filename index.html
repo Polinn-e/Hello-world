@@ -2,16 +2,186 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Привет, мир!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Привет, мир! - 4 мая 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .date {
+            color: #764ba2;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            font-weight: 500;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .files-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .files-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .file-link {
+            display: block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            padding: 15px 20px;
+            margin: 10px 0;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .file-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .file-link:active {
+            transform: translateY(-1px);
+        }
+
+        .image-section {
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .image-link {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .image-link:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(40, 167, 69, 0.3);
+        }
+
+        .footer {
+            margin-top: 30px;
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 25px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
 </head>
 <body>
-    
- </p>
-<a href=“Новая таблица 1.xlsx“
-<a href=“Таблица2.ods“
-<a href=“_таблица 3 задание.xlsx“
-<a href=“Новая таблица 4.xlsx“
-    <p><a href="dental_database.png" download>Скачать изображение</a></p>
+    <div class="container">
+        <h1>🌍 Привет, мир!</h1>
+        <p class="date">📅 4 мая 2026 года</p>
+        
+        <div class="files-section">
+            <h2>📁 Файлы таблиц</h2>
+            <a href="Новая таблица 1.xlsx" class="file-link" download>
+                📊 Новая таблица 1.xlsx
+            </a>
+            <a href="Таблица2.ods" class="file-link" download>
+                📊 Таблица2.ods
+            </a>
+            <a href="_таблица 3 задание.xlsx" class="file-link" download>
+                📊 _таблица 3 задание.xlsx
+            </a>
+            <a href="Новая таблица 4.xlsx" class="file-link" download>
+                📊 Новая таблица 4.xlsx
+            </a>
+        </div>
+
+        <div class="image-section">
+            <a href="dental_database.png" class="image-link" download>
+                🖼️ Скачать изображение
+            </a>
+        </div>
+
+        <div class="footer">
+            <p>Создано с ❤️ в МойОфис</p>
+        </div>
+    </div>
+
+    <script>
+        // Добавляем интерактивность
+        document.querySelectorAll('.file-link, .image-link').forEach(link => {
+            link.addEventListener('click', function() {
+                console.log('Скачивание файла:', this.textContent.trim());
+            });
+        });
+    </script>
 </body>
 </html>
-
