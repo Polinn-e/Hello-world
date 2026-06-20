@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Кроссворды - Медицинские темы</title>
+    <title>Образовательные материалы</title>
     <style>
         * {
             margin: 0;
@@ -82,6 +82,15 @@
 
         .crossword-link.pharma:hover {
             box-shadow: 0 10px 25px rgba(17, 153, 142, 0.6);
+        }
+
+        .crossword-link.presentation {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+        }
+
+        .crossword-link.presentation:hover {
+            box-shadow: 0 10px 25px rgba(245, 87, 108, 0.6);
         }
 
         .icon {
@@ -338,6 +347,202 @@
             background: #0d7a71;
         }
 
+        /* Стили для презентации */
+        .presentation-section {
+            display: none;
+        }
+
+        .presentation-section.active {
+            display: block;
+        }
+
+        .presentation-section .back-button {
+            background: #f5576c;
+        }
+
+        .presentation-section .back-button:hover {
+            background: #e04458;
+        }
+
+        .presentation-section h1 {
+            color: #f5576c;
+        }
+
+        .presentation {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .presentation-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #f5576c;
+            padding-bottom: 15px;
+        }
+
+        .slide-counter {
+            display: inline-block;
+            background: #f5576c;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .slide {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .task {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.3);
+        }
+
+        .task h2 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .task p {
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .code-container {
+            position: relative;
+            background: #1e1e1e;
+            border-radius: 12px;
+            padding: 20px;
+            overflow-x: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #f5576c;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+            z-index: 10;
+        }
+
+        .copy-btn:hover {
+            background: #e04458;
+            transform: scale(1.05);
+        }
+
+        .copy-btn.copied {
+            background: #28a745;
+        }
+
+        pre {
+            margin: 0;
+            color: #d4d4d4;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre;
+        }
+
+        /* Подсветка синтаксиса */
+        .keyword { color: #569cd6; font-weight: bold; }
+        .string { color: #ce9178; }
+        .comment { color: #6a9955; font-style: italic; }
+        .function { color: #dcdcaa; }
+        .number { color: #b5cea8; }
+        .builtin { color: #4ec9b0; }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            background: #f5576c;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 140px;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: #e04458;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+        }
+
+        .nav-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .slide-dots {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            justify-content: center;
+            flex: 1;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ddd;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .dot.active {
+            background: #f5576c;
+            transform: scale(1.3);
+        }
+
+        .dot:hover {
+            background: #999;
+        }
+
+        .hint {
+            text-align: center;
+            color: #999;
+            font-size: 0.85em;
+            margin-top: 15px;
+            font-style: italic;
+        }
+
         @media (max-width: 768px) {
             .crossword-container {
                 flex-direction: column;
@@ -375,6 +580,24 @@
                 font-size: 1.1em;
                 padding: 20px 25px;
             }
+
+            .task h2 {
+                font-size: 1.1em;
+            }
+
+            .task p {
+                font-size: 1em;
+            }
+
+            pre {
+                font-size: 12px;
+            }
+
+            .nav-btn {
+                padding: 10px 15px;
+                font-size: 14px;
+                min-width: 100px;
+            }
         }
     </style>
 </head>
@@ -382,8 +605,8 @@
     <div class="container">
         <!-- Главное меню -->
         <div id="mainMenu" class="menu-container">
-            <h1>📚 Интерактивные кроссворды</h1>
-            <p class="subtitle">Выберите тему для решения кроссворда</p>
+            <h1>📚 Образовательные материалы</h1>
+            <p class="subtitle">Выберите раздел для работы</p>
             
             <div class="links-container">
                 <button onclick="showCrossword('anatomy')" class="crossword-link">
@@ -394,6 +617,11 @@
                 <button onclick="showCrossword('pharma')" class="crossword-link pharma">
                     <span class="icon">💊</span>Кроссворд: Фармакология
                     <span class="description">5 слов о лекарственных средствах</span>
+                </button>
+                
+                <button onclick="showPresentation()" class="crossword-link presentation">
+                    <span class="icon">🐍</span>Презентация: Python
+                    <span class="description">20 задач по программированию</span>
                 </button>
             </div>
         </div>
@@ -459,6 +687,27 @@
                         <div id="pharmaDownClues"></div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Презентация -->
+        <div id="presentationSection" class="presentation-section">
+            <button onclick="showMenu()" class="back-button">← Назад к меню</button>
+            <div class="presentation">
+                <div class="presentation-header">
+                    <h1>🐍 Задачи по программированию на Python</h1>
+                    <div class="slide-counter" id="slideCounter">Слайд 1 из 20</div>
+                </div>
+
+                <div id="slidesContainer"></div>
+
+                <div class="navigation">
+                    <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Назад</button>
+                    <div class="slide-dots" id="slideDots"></div>
+                    <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Далее →</button>
+                </div>
+
+                <div class="hint">💡 Используйте стрелки ← → на клавиатуре для навигации</div>
             </div>
         </div>
     </div>
@@ -540,15 +789,372 @@
             pharma: 'across'
         };
 
-        // Переключение между меню и кроссвордами
+        // Данные презентации
+        const slides = [
+            {
+                title: "Задача 1: Площадь квадрата",
+                task: "Пользователь вводит длину стороны квадрата. Вывести на экран площадь квадрата.",
+                code: `# Запрашиваем у пользователя длину стороны квадрата
+side = float(input("Введите длину стороны квадрата: "))
+
+# Вычисляем площадь (сторона в квадрате)
+area = side ** 2
+
+# Выводим результат
+print(f"Площадь квадрата равна: {area}")`
+            },
+            {
+                title: "Задача 2: Площадь прямоугольника",
+                task: "Пользователь вводит длины сторон прямоугольника. Вывести на экран площадь прямоугольника.",
+                code: `# Запрашиваем длины сторон прямоугольника
+length = float(input("Введите длину прямоугольника: "))
+width = float(input("Введите ширину прямоугольника: "))
+
+# Вычисляем площадь (длина × ширина)
+area = length * width
+
+# Выводим результат
+print(f"Площадь прямоугольника равна: {area}")`
+            },
+            {
+                title: "Задача 3: Среднее арифметическое",
+                task: "Пользователь вводит два числа. Вывести на экран их среднее арифметическое.",
+                code: `# Запрашиваем два числа у пользователя
+num1 = float(input("Введите первое число: "))
+num2 = float(input("Введите второе число: "))
+
+# Вычисляем среднее арифметическое
+average = (num1 + num2) / 2
+
+# Выводим результат
+print(f"Среднее арифметическое равно: {average}")`
+            },
+            {
+                title: "Задача 4: Среднее геометрическое",
+                task: "Пользователь вводит два числа. Вывести на экран их среднее геометрическое.",
+                code: `import math
+
+# Запрашиваем два числа у пользователя
+num1 = float(input("Введите первое число: "))
+num2 = float(input("Введите второе число: "))
+
+# Вычисляем среднее геометрическое (корень из произведения)
+# Формула: √(a * b)
+if num1 >= 0 and num2 >= 0:
+    geometric_mean = math.sqrt(num1 * num2)
+    print(f"Среднее геометрическое равно: {geometric_mean}")
+else:
+    print("Ошибка: для вычисления среднего геометрического числа должны быть неотрицательными.")`
+            },
+            {
+                title: "Задача 5: Прямоугольный треугольник",
+                task: "Пользователь вводит длины катетов прямоугольного треугольника. Вывести на экран его гипотенузу и площадь.",
+                code: `import math
+
+# Запрашиваем длины катетов
+a = float(input("Введите длину первого катета: "))
+b = float(input("Введите длину второго катета: "))
+
+# Вычисляем гипотенузу по теореме Пифагора: c = √(a² + b²)
+hypotenuse = math.sqrt(a**2 + b**2)
+
+# Вычисляем площадь прямоугольного треугольника: S = (a * b) / 2
+area = (a * b) / 2
+
+# Выводим результаты
+print(f"Гипотенуза равна: {hypotenuse}")
+print(f"Площадь равна: {area}")`
+            },
+            {
+                title: "Задача 6: Три квадрата",
+                task: "Пользователь вводит число N. Вывести на экран через запятую (N-1)², N², (N+1)².",
+                code: `# Запрашиваем число N
+N = int(input("Введите число N: "))
+
+# Вычисляем значения
+val1 = (N - 1) ** 2
+val2 = N ** 2
+val3 = (N + 1) ** 2
+
+# Выводим через запятую
+print(f"{val1}, {val2}, {val3}")`
+            },
+            {
+                title: "Задача 7: Високосный год",
+                task: "Пользователь вводит год. Вывести на экран ответ, является ли год високосным.",
+                code: `# Запрашиваем год у пользователя
+year = int(input("Введите год: "))
+
+# Проверяем по правилам високосного года:
+# - год делится на 400 → високосный
+# - год делится на 4, но НЕ делится на 100 → високосный
+# - во всех остальных случаях → невисокосный
+if (year % 400 == 0) or (year % 4 == 0 and year % 100 != 0):
+    print(f"{year} год — високосный")
+else:
+    print(f"{year} год — невисокосный")`
+            },
+            {
+                title: "Задача 8: Чётное или нечётное",
+                task: "Пользователь вводит целое число. Программа должна ответить, четным или нечетным является это число.",
+                code: `# Запрашиваем целое число у пользователя
+num = int(input("Введите целое число: "))
+
+# Проверяем чётность
+if num % 2 == 0:
+    print(f"Число {num} — чётное")
+else:
+    print(f"Число {num} — нечётное")`
+            },
+            {
+                title: "Задача 9: Сумма или разность",
+                task: "Пользователь вводит два числа. Если первое число меньше второго, то вычислить их сумму, иначе – разность первого и второго.",
+                code: `# Запрашиваем два числа у пользователя
+num1 = float(input("Введите первое число: "))
+num2 = float(input("Введите второе число: "))
+
+# Проверяем условие и выполняем соответствующую операцию
+if num1 < num2:
+    result = num1 + num2
+    print(f"Первое число меньше второго, поэтому вычисляем сумму: {result}")
+else:
+    result = num1 - num2
+    print(f"Первое число не меньше второго, поэтому вычисляем разность: {result}")`
+            },
+            {
+                title: "Задача 10: Степени числа 2",
+                task: "Распечатать первые 16 степеней числа 2.",
+                code: `# Выводим степени числа 2 от 2^0 до 2^15 (всего 16 значений)
+for i in range(16):
+    print(f"2^{i} = {2**i}")`
+            },
+            {
+                title: "Задача 11: Подсчёт чётных чисел",
+                task: "Пользователь вводит 10 целых чисел. Подсчитать, сколько среди них четных чисел.",
+                code: `# Инициализируем счетчик четных чисел
+even_count = 0
+
+# Запрашиваем 10 чисел
+print("Введите 10 целых чисел:")
+for i in range(10):
+    num = int(input(f"Число {i+1}: "))
+
+    # Проверяем, является ли число четным
+    if num % 2 == 0:
+        even_count += 1
+
+# Выводим результат
+print(f"Среди введенных чисел {even_count} четных")`
+            },
+            {
+                title: "Задача 12: Положительные, отрицательные и нули",
+                task: "Пользователь вводит 10 целых чисел. Подсчитать, сколько среди них положительных, сколько отрицательных и сколько нулей.",
+                code: `# Инициализируем счетчики
+positive_count = 0
+negative_count = 0
+zero_count = 0
+
+# Запрашиваем 10 чисел
+print("Введите 10 целых чисел:")
+for i in range(10):
+    num = int(input(f"Число {i+1}: "))
+
+    # Проверяем знак числа
+    if num > 0:
+        positive_count += 1
+    elif num < 0:
+        negative_count += 1
+    else:
+        zero_count += 1
+
+# Выводим результаты
+print(f"\\nПоложительных чисел: {positive_count}")
+print(f"Отрицательных чисел: {negative_count}")
+print(f"Нулей: {zero_count}")`
+            },
+            {
+                title: "Задача 13: Разница max и min",
+                task: "Пользователь вводит 10 целых чисел. Найти разницу между наибольшим и наименьшим.",
+                code: `# Запрашиваем первое число и используем его как начальное значение для max и min
+first_num = int(input("Число 1: "))
+max_num = first_num
+min_num = first_num
+
+# Запрашиваем оставшиеся 9 чисел
+for i in range(2, 11):
+    num = int(input(f"Число {i}: "))
+
+    # Обновляем максимум и минимум
+    if num > max_num:
+        max_num = num
+    if num < min_num:
+        min_num = num
+
+# Вычисляем и выводим разницу
+difference = max_num - min_num
+print(f"\\nНаибольшее число: {max_num}")
+print(f"Наименьшее число: {min_num}")
+print(f"Разница между ними: {difference}")`
+            },
+            {
+                title: "Задача 14: Максимум в массиве",
+                task: "Пользователь вводит массив А из 10 целых чисел. Подсчитать количество чисел, равных максимальному элементу массива.",
+                code: `A = []
+print("Введите 10 целых чисел:")
+for i in range(10):
+    A.append(int(input(f"Число {i+1}: ")))
+
+max_val = A[0]
+count = 1
+
+for i in range(1, 10):
+    if A[i] > max_val:
+        max_val = A[i]
+        count = 1
+    elif A[i] == max_val:
+        count += 1
+
+print(f"Максимальный элемент: {max_val}, встречается {count} раз(а)")`
+            },
+            {
+                title: "Задача 15: Суммы чётных и нечётных индексов",
+                task: "Пользователь вводит массив А из 10 целых чисел. Подсчитать разницу между суммой всех элементов с четными индексами и суммой всех элементов с нечетными индексами.",
+                code: `# Список для хранения массива A
+A = []
+
+print("Введите 10 целых чисел:")
+for i in range(10):
+    num = int(input(f"Число {i+1}: "))
+    A.append(num)
+
+# Сумма элементов с четными индексами (0, 2, 4, 6, 8)
+sum_even = sum(A[0::2])
+
+# Сумма элементов с нечетными индексами (1, 3, 5, 7, 9)
+sum_odd = sum(A[1::2])
+
+# Разница
+difference = sum_even - sum_odd
+
+# Выводим результаты
+print(f"Массив A: {A}")
+print(f"Элементы с четными индексами: {A[0::2]} (сумма = {sum_even})")
+print(f"Элементы с нечетными индексами: {A[1::2]} (сумма = {sum_odd})")
+print(f"Разница: {difference}")`
+            },
+            {
+                title: "Задача 16: Подсчёт цифр в тексте",
+                task: "Подсчитать количество арабских цифр в тексте, введенном пользователем с клавиатуры.",
+                code: `# Запрашиваем текст у пользователя
+text = input("Введите текст: ")
+
+# Инициализируем счетчик
+digit_count = 0
+
+# Проходим по каждому символу в тексте
+for char in text:
+    # Проверяем, является ли символ цифрой
+    if char.isdigit():
+        digit_count += 1
+
+# Выводим результат
+print(f"Количество арабских цифр в тексте: {digit_count}")`
+            },
+            {
+                title: "Задача 17: Удаление пробелов",
+                task: "Убрать из строки, введенной пользователем все пробелы, и распечатать ее.",
+                code: `# Запрашиваем строку у пользователя
+text = input("Введите строку: ")
+
+# Удаляем все пробелы
+# Метод replace заменяет все вхождения первого аргумента на второй
+text_without_spaces = text.replace(" ", "")
+
+# Выводим результат
+print(f"Строка без пробелов: {text_without_spaces}")`
+            },
+            {
+                title: "Задача 18: Первое слово",
+                task: "Распечатать первое слово из строки, введенной пользователем с клавиатуры.",
+                code: `# Запрашиваем строку у пользователя
+text = input("Введите строку: ")
+
+# Разбиваем строку на слова
+words = text.split()
+
+# Проверяем, что строка не пустая
+if words:
+    print(f"Первое слово: {words[0]}")
+else:
+    print("Строка не содержит слов.")`
+            },
+            {
+                title: "Задача 19: Запись в файл",
+                task: "Пользователь вводит с клавиатуры текст. Записать его в файл.",
+                code: `# Запрашиваем текст у пользователя
+text = input("Введите текст: ")
+
+# Открываем файл для записи
+with open("output.txt", "w", encoding="utf-8") as file:
+    file.write(text)
+
+print("Текст успешно записан в файл output.txt")`
+            },
+            {
+                title: "Задача 20: Игра «Угадай число»",
+                task: "Написать программу для игры человека с компьютером. Человек загадывает число из диапазона [N,M], а компьютер должен отгадать это число за минимальное количество вопросов типа «да-нет».",
+                code: `# Запрашиваем диапазон у пользователя
+print("Загадайте число в указанном диапазоне.")
+N = int(input("Введите нижнюю границу N: "))
+M = int(input("Введите верхнюю границу M: "))
+
+# Проверяем корректность диапазона
+if N > M:
+    print("Ошибка: N не может быть больше M!")
+else:
+    questions = 0
+    left = N
+    right = M
+
+    print("\\nКомпьютер начинает угадывать число...")
+
+    # Бинарный поиск
+    while left < right:
+        mid = (left + right) // 2
+        questions += 1
+
+        # Задаём вопрос
+        answer = input(f"Вопрос {questions}: Ваше число больше {mid}? (да/нет): ").strip().lower()
+
+        # Обрабатываем ответ
+        if answer in ("да", "yes", "д", "y"):
+            left = mid + 1
+        elif answer in ("нет", "no", "н", "n"):
+            right = mid
+        else:
+            print("Непонятный ответ. Считаем, что 'нет'.")
+            right = mid
+
+    # Когда left == right, мы нашли число
+    print(f"\\n🎉 Ваше число: {left}")
+    print(f"Количество вопросов: {questions}")`
+            }
+        ];
+
+        let currentSlide = 0;
+        let presentationInitialized = false;
+
+        // Переключение между меню и разделами
         function showMenu() {
             document.getElementById('mainMenu').style.display = 'block';
             document.getElementById('anatomySection').classList.remove('active');
             document.getElementById('pharmaSection').classList.remove('active');
+            document.getElementById('presentationSection').classList.remove('active');
         }
 
         function showCrossword(type) {
             document.getElementById('mainMenu').style.display = 'none';
+            document.getElementById('presentationSection').classList.remove('active');
             
             if (type === 'anatomy') {
                 document.getElementById('anatomySection').classList.add('active');
@@ -560,6 +1166,19 @@
                 if (!document.getElementById('pharmaGrid').hasChildNodes()) {
                     initCrossword('pharma', pharmaData);
                 }
+            }
+        }
+
+        function showPresentation() {
+            document.getElementById('mainMenu').style.display = 'none';
+            document.getElementById('anatomySection').classList.remove('active');
+            document.getElementById('pharmaSection').classList.remove('active');
+            document.getElementById('presentationSection').classList.add('active');
+            
+            if (!presentationInitialized) {
+                createSlides();
+                updateNavigation();
+                presentationInitialized = true;
             }
         }
 
@@ -856,6 +1475,120 @@
                 message.className = 'message error';
             }
         }
+
+        // Функции для презентации
+        function highlightPython(code) {
+            let html = code
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+
+            html = html.replace(/(#[^\n]*)/g, '<span class="comment">$1</span>');
+            html = html.replace(/(&quot;[^&]*?&quot;|"[^"]*?"|'[^']*?')/g, '<span class="string">$1</span>');
+
+            const keywords = ['import', 'from', 'def', 'class', 'if', 'elif', 'else', 'for', 'while', 'in', 'return', 'break', 'continue', 'with', 'as', 'try', 'except', 'finally', 'raise', 'pass', 'and', 'or', 'not', 'True', 'False', 'None'];
+            keywords.forEach(kw => {
+                const regex = new RegExp(`\\b(${kw})\\b`, 'g');
+                html = html.replace(regex, '<span class="keyword">$1</span>');
+            });
+
+            const builtins = ['print', 'input', 'int', 'float', 'str', 'len', 'range', 'sum', 'open', 'math', 'sqrt', 'replace', 'split', 'isdigit', 'append'];
+            builtins.forEach(fn => {
+                const regex = new RegExp(`\\b(${fn})\\b(?=\\s*\\()`, 'g');
+                html = html.replace(regex, '<span class="builtin">$1</span>');
+            });
+
+            html = html.replace(/\b(\d+\.?\d*)\b/g, '<span class="number">$1</span>');
+
+            return html;
+        }
+
+        function createSlides() {
+            const container = document.getElementById('slidesContainer');
+            const dotsContainer = document.getElementById('slideDots');
+
+            slides.forEach((slide, index) => {
+                const slideDiv = document.createElement('div');
+                slideDiv.className = 'slide' + (index === 0 ? ' active' : '');
+                slideDiv.dataset.index = index;
+
+                slideDiv.innerHTML = `
+                    <div class="task">
+                        <h2>📝 ${slide.title}</h2>
+                        <p>${slide.task}</p>
+                    </div>
+                    <div class="code-container">
+                        <button class="copy-btn" onclick="copyCode(${index})">📋 Копировать</button>
+                        <pre><code>${highlightPython(slide.code)}</code></pre>
+                    </div>
+                `;
+
+                container.appendChild(slideDiv);
+
+                const dot = document.createElement('div');
+                dot.className = 'dot' + (index === 0 ? ' active' : '');
+                dot.onclick = () => goToSlide(index);
+                dotsContainer.appendChild(dot);
+            });
+        }
+
+        function goToSlide(index) {
+            const allSlides = document.querySelectorAll('.slide');
+            const allDots = document.querySelectorAll('.dot');
+
+            allSlides[currentSlide].classList.remove('active');
+            allDots[currentSlide].classList.remove('active');
+
+            currentSlide = index;
+
+            allSlides[currentSlide].classList.add('active');
+            allDots[currentSlide].classList.add('active');
+
+            updateNavigation();
+        }
+
+        function changeSlide(direction) {
+            const newIndex = currentSlide + direction;
+            if (newIndex >= 0 && newIndex < slides.length) {
+                goToSlide(newIndex);
+            }
+        }
+
+        function updateNavigation() {
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === slides.length - 1;
+            document.getElementById('slideCounter').textContent = `Слайд ${currentSlide + 1} из ${slides.length}`;
+        }
+
+        function copyCode(index) {
+            const code = slides[index].code;
+            navigator.clipboard.writeText(code).then(() => {
+                const buttons = document.querySelectorAll('.copy-btn');
+                const btn = buttons[index];
+                const originalText = btn.textContent;
+                btn.textContent = '✓ Скопировано!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // Обработка клавиатуры для презентации
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('presentationSection').classList.contains('active')) {
+                if (e.key === 'ArrowLeft') {
+                    changeSlide(-1);
+                } else if (e.key === 'ArrowRight') {
+                    changeSlide(1);
+                } else if (e.key === 'Home') {
+                    goToSlide(0);
+                } else if (e.key === 'End') {
+                    goToSlide(slides.length - 1);
+                }
+            }
+        });
     </script>
 </body>
 </html>
