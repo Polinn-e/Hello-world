@@ -16,25 +16,28 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
         .container {
             background: white;
             border-radius: 20px;
-            padding: 50px;
+            padding: 30px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 700px;
-            width: 100%;
-            text-align: center;
+            max-width: 1200px;
+            margin: 20px auto;
         }
 
         h1 {
+            text-align: center;
             color: #667eea;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             font-size: 2.5em;
+        }
+
+        /* Стили для меню выбора */
+        .menu-container {
+            text-align: center;
+            padding: 40px 20px;
         }
 
         .subtitle {
@@ -63,6 +66,8 @@
             max-width: 450px;
             transition: all 0.3s;
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            cursor: pointer;
+            border: none;
         }
 
         .crossword-link:hover {
@@ -92,13 +97,278 @@
             opacity: 0.9;
         }
 
-        @media (max-width: 600px) {
-            .container {
-                padding: 30px 20px;
+        /* Стили для кроссворда */
+        .crossword-section {
+            display: none;
+        }
+
+        .crossword-section.active {
+            display: block;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .back-button:hover {
+            background: #5568d3;
+            transform: translateX(-5px);
+        }
+
+        .crossword-container {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .grid-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .grid {
+            display: grid;
+            gap: 2px;
+            background: #333;
+            padding: 2px;
+            border-radius: 5px;
+        }
+
+        .cell {
+            width: 42px;
+            height: 42px;
+            position: relative;
+            background: white;
+        }
+
+        .cell.empty {
+            background: #333;
+        }
+
+        .cell input {
+            width: 100%;
+            height: 100%;
+            border: none;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            background: white;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .cell input:focus {
+            background: #fff3cd;
+        }
+
+        .cell input.highlight {
+            background: #e3f2fd;
+        }
+
+        .cell input.correct {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .cell input.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .cell .number {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            font-size: 10px;
+            color: #667eea;
+            font-weight: bold;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .clues {
+            flex: 1;
+            min-width: 300px;
+            max-width: 450px;
+        }
+
+        .clues-section {
+            margin-bottom: 20px;
+        }
+
+        .clues-section h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 5px;
+        }
+
+        .clue {
+            margin: 8px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+        }
+
+        .clue:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .clue.active {
+            background: #667eea;
+            color: white;
+            border-left-color: #4a5bb8;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        button.action-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 150px;
+        }
+
+        .btn-check {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-check:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .btn-show {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .btn-show:hover {
+            background: #e0a800;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 193, 7, 0.4);
+        }
+
+        .btn-clear {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-clear:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+        }
+
+        .message {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+
+        /* Стили для фармакологии */
+        .pharma-theme h1 {
+            color: #11998e;
+        }
+
+        .pharma-theme .clues-section h3 {
+            color: #11998e;
+            border-bottom-color: #11998e;
+        }
+
+        .pharma-theme .cell .number {
+            color: #11998e;
+        }
+
+        .pharma-theme .clue.active {
+            background: #11998e;
+            border-left-color: #0a6c62;
+        }
+
+        .pharma-theme .back-button {
+            background: #11998e;
+        }
+
+        .pharma-theme .back-button:hover {
+            background: #0d7a71;
+        }
+
+        @media (max-width: 768px) {
+            .crossword-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .cell {
+                width: 30px;
+                height: 30px;
+            }
+
+            .cell input {
+                font-size: 14px;
+            }
+
+            .cell .number {
+                font-size: 8px;
             }
 
             h1 {
                 font-size: 1.8em;
+            }
+
+            button.action-btn {
+                min-width: 120px;
+                font-size: 14px;
+                padding: 10px 16px;
+            }
+
+            .container {
+                padding: 20px;
             }
 
             .crossword-link {
@@ -110,20 +380,482 @@
 </head>
 <body>
     <div class="container">
-        <h1>📚 Интерактивные кроссворды</h1>
-        <p class="subtitle">Выберите тему для решения кроссворда</p>
-        
-        <div class="links-container">
-            <a href="krossvordRU.html" class="crossword-link">
-                <span class="icon">🏥</span>Кроссворд: Анатомия
-                <span class="description">10 слов о строении человеческого тела</span>
-            </a>
+        <!-- Главное меню -->
+        <div id="mainMenu" class="menu-container">
+            <h1>📚 Интерактивные кроссворды</h1>
+            <p class="subtitle">Выберите тему для решения кроссворда</p>
             
-            <a href="krossvordFa.html" class="crossword-link pharma">
-                <span class="icon">💊</span>Кроссворд: Фармакология
-                <span class="description">5 слов о лекарственных средствах</span>
-            </a>
+            <div class="links-container">
+                <button onclick="showCrossword('anatomy')" class="crossword-link">
+                    <span class="icon">🏥</span>Кроссворд: Анатомия
+                    <span class="description">10 слов о строении человеческого тела</span>
+                </button>
+                
+                <button onclick="showCrossword('pharma')" class="crossword-link pharma">
+                    <span class="icon">💊</span>Кроссворд: Фармакология
+                    <span class="description">5 слов о лекарственных средствах</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Кроссворд: Анатомия -->
+        <div id="anatomySection" class="crossword-section">
+            <button onclick="showMenu()" class="back-button">← Назад к меню</button>
+            <h1>🏥 Анатомия человека</h1>
+            
+            <div class="crossword-container">
+                <div class="grid-wrapper">
+                    <div class="grid" id="anatomyGrid"></div>
+                    
+                    <div class="buttons">
+                        <button class="action-btn btn-check" onclick="checkAnswers('anatomy')">✓ Проверить</button>
+                        <button class="action-btn btn-show" onclick="showAnswers('anatomy')">👁 Показать ответы</button>
+                        <button class="action-btn btn-clear" onclick="clearAll('anatomy')">🗑 Очистить</button>
+                    </div>
+                    
+                    <div class="message" id="anatomyMessage"></div>
+                </div>
+                
+                <div class="clues">
+                    <div class="clues-section">
+                        <h3>По горизонтали →</h3>
+                        <div id="anatomyAcrossClues"></div>
+                    </div>
+                    
+                    <div class="clues-section">
+                        <h3>По вертикали ↓</h3>
+                        <div id="anatomyDownClues"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Кроссворд: Фармакология -->
+        <div id="pharmaSection" class="crossword-section pharma-theme">
+            <button onclick="showMenu()" class="back-button">← Назад к меню</button>
+            <h1>💊 Фармакология</h1>
+            
+            <div class="crossword-container">
+                <div class="grid-wrapper">
+                    <div class="grid" id="pharmaGrid"></div>
+                    
+                    <div class="buttons">
+                        <button class="action-btn btn-check" onclick="checkAnswers('pharma')">✓ Проверить</button>
+                        <button class="action-btn btn-show" onclick="showAnswers('pharma')">👁 Показать ответы</button>
+                        <button class="action-btn btn-clear" onclick="clearAll('pharma')">🗑 Очистить</button>
+                    </div>
+                    
+                    <div class="message" id="pharmaMessage"></div>
+                </div>
+                
+                <div class="clues">
+                    <div class="clues-section">
+                        <h3>По горизонтали →</h3>
+                        <div id="pharmaAcrossClues"></div>
+                    </div>
+                    
+                    <div class="clues-section">
+                        <h3>По вертикали ↓</h3>
+                        <div id="pharmaDownClues"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
+    <script>
+        // Данные кроссворда: Анатомия
+        const anatomyData = {
+            rows: 12,
+            cols: 13,
+            grid: [
+                ['С', 'Е', 'Р', 'Д', 'Ц', 'Е', '', '', '', '', '', '', ''],
+                ['', '', '', 'Е', '', '', 'И', '', '', '', '', '', ''],
+                ['', 'П', 'Е', 'Ч', 'Е', 'Н', 'Ш', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', 'К', '', '', '', '', '', ''],
+                ['', '', 'М', 'О', 'З', 'Г', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', '', '', '', ''],
+                ['Л', 'Ё', 'Г', 'К', 'И', 'Е', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', '', '', '', ''],
+                ['', 'Ж', 'Е', 'Л', 'У', 'Д', 'О', 'К', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '', '', '', '', '', '']
+            ],
+            words: {
+                across: [
+                    { number: 1, word: 'СЕРДЦЕ', row: 0, col: 0, direction: 'across', clue: 'Мышечный орган, перекачивающий кровь' },
+                    { number: 2, word: 'ПЕЧЕНЬ', row: 2, col: 1, direction: 'across', clue: 'Железа, участвующая в обмене веществ' },
+                    { number: 3, word: 'МОЗГ', row: 4, col: 2, direction: 'across', clue: 'Центральный орган нервной системы' },
+                    { number: 4, word: 'ЛЁГКИЕ', row: 6, col: 0, direction: 'across', clue: 'Органы дыхания' },
+                    { number: 5, word: 'ЖЕЛУДОК', row: 8, col: 1, direction: 'across', clue: 'Орган пищеварения' }
+                ],
+                down: [
+                    { number: 6, word: 'ПОЧКА', row: 0, col: 3, direction: 'down', clue: 'Орган мочевыделительной системы' },
+                    { number: 7, word: 'КИШЕЧНИК', row: 0, col: 6, direction: 'down', clue: 'Часть пищеварительного тракта' },
+                    { number: 8, word: 'ПОЗВОНОЧНИК', row: 0, col: 8, direction: 'down', clue: 'Опора тела' },
+                    { number: 9, word: 'МЫШЦА', row: 2, col: 10, direction: 'down', clue: 'Орган двигательной системы' },
+                    { number: 10, word: 'КОСТЬ', row: 4, col: 12, direction: 'down', clue: 'Твёрдая часть скелета' }
+                ]
+            }
+        };
+
+        // Данные кроссворда: Фармакология
+        const pharmaData = {
+            rows: 11,
+            cols: 11,
+            grid: [
+                ['', '', '', '', 'М', '', '', '', '', '', ''],
+                ['', '', '', '', 'Е', '', '', '', '', '', 'П'],
+                ['', '', '', 'Р', 'Е', 'Ц', 'Е', 'П', 'Т', 'О', 'Р'],
+                ['', '', '', 'Е', 'Т', '', '', '', '', '', 'Е'],
+                ['', '', '', 'П', 'А', '', '', '', '', '', 'П'],
+                ['А', 'Н', 'Т', 'И', 'Б', 'И', 'О', 'Т', 'И', 'К', ''],
+                ['', '', '', '', 'О', '', '', '', '', '', 'Р'],
+                ['', '', '', '', 'Л', '', '', '', '', '', 'А'],
+                ['', '', '', '', 'И', '', '', '', '', '', 'Т'],
+                ['', '', 'Д', 'О', 'З', 'А', '', '', '', '', ''],
+                ['', '', '', '', 'М', '', '', '', '', '', '']
+            ],
+            words: {
+                across: [
+                    { number: 1, word: 'АНТИБИОТИК', row: 5, col: 0, direction: 'across', clue: 'Вещество природного или полусинтетического происхождения, подавляющее рост бактерий' },
+                    { number: 2, word: 'РЕЦЕПТОР', row: 2, col: 3, direction: 'across', clue: 'Молекулярная мишень в организме, с которой взаимодействует лекарство для оказания эффекта' },
+                    { number: 3, word: 'ДОЗА', row: 9, col: 2, direction: 'across', clue: 'Количество лекарственного вещества, принимаемое за один раз или определённый промежуток времени' }
+                ],
+                down: [
+                    { number: 4, word: 'МЕТАБОЛИЗМ', row: 1, col: 4, direction: 'down', clue: 'Процесс биохимического превращения лекарства в организме' },
+                    { number: 5, word: 'ПРЕПАРАТ', row: 1, col: 10, direction: 'down', clue: 'Лекарственное средство для лечения, профилактики или диагностики' }
+                ]
+            }
+        };
+
+        let activeWords = {
+            anatomy: null,
+            pharma: null
+        };
+        
+        let activeDirections = {
+            anatomy: 'across',
+            pharma: 'across'
+        };
+
+        // Переключение между меню и кроссвордами
+        function showMenu() {
+            document.getElementById('mainMenu').style.display = 'block';
+            document.getElementById('anatomySection').classList.remove('active');
+            document.getElementById('pharmaSection').classList.remove('active');
+        }
+
+        function showCrossword(type) {
+            document.getElementById('mainMenu').style.display = 'none';
+            
+            if (type === 'anatomy') {
+                document.getElementById('anatomySection').classList.add('active');
+                if (!document.getElementById('anatomyGrid').hasChildNodes()) {
+                    initCrossword('anatomy', anatomyData);
+                }
+            } else if (type === 'pharma') {
+                document.getElementById('pharmaSection').classList.add('active');
+                if (!document.getElementById('pharmaGrid').hasChildNodes()) {
+                    initCrossword('pharma', pharmaData);
+                }
+            }
+        }
+
+        // Инициализация кроссворда
+        function initCrossword(type, data) {
+            createGrid(type, data);
+            createClues(type, data);
+        }
+
+        // Создание сетки
+        function createGrid(type, data) {
+            const gridId = type + 'Grid';
+            const grid = document.getElementById(gridId);
+            grid.style.gridTemplateColumns = `repeat(${data.cols}, 42px)`;
+            
+            for (let row = 0; row < data.rows; row++) {
+                for (let col = 0; col < data.cols; col++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    
+                    if (data.grid[row] && data.grid[row][col] !== '') {
+                        const input = document.createElement('input');
+                        input.type = 'text';
+                        input.maxLength = 1;
+                        input.dataset.row = row;
+                        input.dataset.col = col;
+                        input.dataset.type = type;
+                        
+                        input.addEventListener('input', handleInput);
+                        input.addEventListener('keydown', handleKeyDown);
+                        input.addEventListener('focus', () => onCellFocus(type, row, col));
+                        
+                        cell.appendChild(input);
+                        
+                        const number = getWordNumber(type, data, row, col);
+                        if (number) {
+                            const numberSpan = document.createElement('span');
+                            numberSpan.className = 'number';
+                            numberSpan.textContent = number;
+                            cell.appendChild(numberSpan);
+                        }
+                    } else {
+                        cell.classList.add('empty');
+                    }
+                    
+                    grid.appendChild(cell);
+                }
+            }
+        }
+
+        function getWordNumber(type, data, row, col) {
+            const allWords = [...data.words.across, ...data.words.down];
+            const word = allWords.find(w => w.row === row && w.col === col);
+            return word ? word.number : null;
+        }
+
+        // Создание подсказок
+        function createClues(type, data) {
+            const acrossCluesId = type + 'AcrossClues';
+            const downCluesId = type + 'DownClues';
+            const acrossClues = document.getElementById(acrossCluesId);
+            const downClues = document.getElementById(downCluesId);
+            
+            data.words.across.forEach(word => {
+                const clue = document.createElement('div');
+                clue.className = 'clue';
+                clue.dataset.number = word.number;
+                clue.dataset.direction = 'across';
+                clue.dataset.type = type;
+                clue.textContent = `${word.number}. ${word.clue}`;
+                clue.onclick = () => selectWord(type, word);
+                acrossClues.appendChild(clue);
+            });
+            
+            data.words.down.forEach(word => {
+                const clue = document.createElement('div');
+                clue.className = 'clue';
+                clue.dataset.number = word.number;
+                clue.dataset.direction = 'down';
+                clue.dataset.type = type;
+                clue.textContent = `${word.number}. ${word.clue}`;
+                clue.onclick = () => selectWord(type, word);
+                downClues.appendChild(clue);
+            });
+        }
+
+        // Обработка ввода
+        function handleInput(e) {
+            const input = e.target;
+            const value = input.value.toUpperCase();
+            input.value = value;
+            input.classList.remove('correct', 'incorrect');
+            
+            if (value) {
+                moveToNext(input);
+            }
+        }
+
+        function handleKeyDown(e) {
+            const input = e.target;
+            const type = input.dataset.type;
+            const row = parseInt(input.dataset.row);
+            const col = parseInt(input.dataset.col);
+            
+            if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                activeDirections[type] = 'across';
+                focusCell(type, row, col + 1);
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                activeDirections[type] = 'across';
+                focusCell(type, row, col - 1);
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                activeDirections[type] = 'down';
+                focusCell(type, row + 1, col);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                activeDirections[type] = 'down';
+                focusCell(type, row - 1, col);
+            } else if (e.key === 'Backspace' && !input.value) {
+                e.preventDefault();
+                moveToPrev(input);
+            } else if (e.key === 'Tab') {
+                e.preventDefault();
+                activeDirections[type] = activeDirections[type] === 'across' ? 'down' : 'across';
+                if (activeWords[type]) highlightWord(type, activeWords[type]);
+            }
+        }
+
+        function moveToNext(input) {
+            const type = input.dataset.type;
+            const row = parseInt(input.dataset.row);
+            const col = parseInt(input.dataset.col);
+            
+            if (activeDirections[type] === 'across') {
+                focusCell(type, row, col + 1);
+            } else {
+                focusCell(type, row + 1, col);
+            }
+        }
+
+        function moveToPrev(input) {
+            const type = input.dataset.type;
+            const row = parseInt(input.dataset.row);
+            const col = parseInt(input.dataset.col);
+            
+            if (activeDirections[type] === 'across') {
+                focusCell(type, row, col - 1);
+            } else {
+                focusCell(type, row - 1, col);
+            }
+        }
+
+        function focusCell(type, row, col) {
+            const input = document.querySelector(`input[data-type="${type}"][data-row="${row}"][data-col="${col}"]`);
+            if (input) {
+                input.focus();
+            }
+        }
+
+        function onCellFocus(type, row, col) {
+            const data = type === 'anatomy' ? anatomyData : pharmaData;
+            const startWord = findWordStartingAt(type, data, row, col);
+            if (startWord) {
+                selectWord(type, startWord);
+                return;
+            }
+            
+            const containingWord = findWordContaining(type, data, row, col);
+            if (containingWord) {
+                selectWord(type, containingWord);
+            }
+        }
+
+        function findWordStartingAt(type, data, row, col) {
+            const allWords = [...data.words.across, ...data.words.down];
+            return allWords.find(w => w.row === row && w.col === col);
+        }
+
+        function findWordContaining(type, data, row, col) {
+            const allWords = [...data.words.across, ...data.words.down];
+            
+            const activeWordsList = allWords.filter(w => w.direction === activeDirections[type]);
+            for (const word of activeWordsList) {
+                if (containsCell(word, row, col)) return word;
+            }
+            
+            for (const word of allWords) {
+                if (containsCell(word, row, col)) {
+                    activeDirections[type] = word.direction;
+                    return word;
+                }
+            }
+            return null;
+        }
+
+        function containsCell(word, row, col) {
+            if (word.direction === 'across') {
+                return word.row === row && col >= word.col && col < word.col + word.word.length;
+            } else {
+                return word.col === col && row >= word.row && row < word.row + word.word.length;
+            }
+        }
+
+        function selectWord(type, word) {
+            activeWords[type] = word;
+            activeDirections[type] = word.direction;
+            highlightWord(type, word);
+            
+            const input = document.querySelector(`input[data-type="${type}"][data-row="${word.row}"][data-col="${word.col}"]`);
+            if (input) input.focus();
+            
+            document.querySelectorAll(`.clue[data-type="${type}"]`).forEach(clue => clue.classList.remove('active'));
+            const clueElement = document.querySelector(`.clue[data-type="${type}"][data-number="${word.number}"][data-direction="${word.direction}"]`);
+            if (clueElement) clueElement.classList.add('active');
+        }
+
+        function highlightWord(type, word) {
+            document.querySelectorAll(`input[data-type="${type}"]`).forEach(input => {
+                input.classList.remove('highlight');
+            });
+            
+            for (let i = 0; i < word.word.length; i++) {
+                const row = word.direction === 'across' ? word.row : word.row + i;
+                const col = word.direction === 'across' ? word.col + i : word.col;
+                const input = document.querySelector(`input[data-type="${type}"][data-row="${row}"][data-col="${col}"]`);
+                if (input) {
+                    input.classList.add('highlight');
+                }
+            }
+        }
+
+        // Проверка ответов
+        function checkAnswers(type) {
+            const data = type === 'anatomy' ? anatomyData : pharmaData;
+            let allCorrect = true;
+            let hasEmpty = false;
+            
+            document.querySelectorAll(`input[data-type="${type}"]`).forEach(input => {
+                const row = parseInt(input.dataset.row);
+                const col = parseInt(input.dataset.col);
+                const correctLetter = data.grid[row][col];
+                const userLetter = input.value.toUpperCase();
+                
+                input.classList.remove('correct', 'incorrect');
+                
+                if (!userLetter) {
+                    hasEmpty = true;
+                } else if (userLetter === correctLetter) {
+                    input.classList.add('correct');
+                } else {
+                    input.classList.add('incorrect');
+                    allCorrect = false;
+                }
+            });
+            
+            showMessage(type, allCorrect && !hasEmpty, hasEmpty);
+        }
+
+        function showAnswers(type) {
+            const data = type === 'anatomy' ? anatomyData : pharmaData;
+            document.querySelectorAll(`input[data-type="${type}"]`).forEach(input => {
+                const row = parseInt(input.dataset.row);
+                const col = parseInt(input.dataset.col);
+                input.value = data.grid[row][col];
+                input.classList.remove('incorrect');
+                input.classList.add('correct');
+            });
+            const message = document.getElementById(type + 'Message');
+            message.textContent = '📖 Правильные ответы показаны';
+            message.className = 'message success';
+        }
+
+        function clearAll(type) {
+            document.querySelectorAll(`input[data-type="${type}"]`).forEach(input => {
+                input.value = '';
+                input.classList.remove('correct', 'incorrect', 'highlight');
+            });
+            document.getElementById(type + 'Message').className = 'message';
+            document.getElementById(type + 'Message').textContent = '';
+        }
+
+        function showMessage(type, success, hasEmpty) {
+            const message = document.getElementById(type + 'Message');
+            if (success) {
+                message.textContent = '🎉 Поздравляем! Кроссворд решён правильно!';
+                message.className = 'message success';
+            } else if (hasEmpty) {
+                message.textContent = '⚠️ Заполните все клетки!';
+                message.className = 'message error';
+            } else {
+                message.textContent = '❌ Есть ошибки. Попробуйте ещё раз!';
+                message.className = 'message error';
+            }
+        }
+    </script>
 </body>
 </html>
